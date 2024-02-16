@@ -1373,3 +1373,42 @@ $('#demo .image-container').click(function () {
         }
     })
 })
+
+function handleFileUpload(event) {
+  const file = event.target.files[0];
+  if(file) {
+    const imageUrl = URL.createObjectURL(file);
+    loadOpenCV(function () {
+      $('#demo-result').empty()
+
+      const newImg = document.createElement("img")
+      newImg.src = imageUrl
+
+      newImg.onload = function(){
+          const resultCanvas = scanner.extractPaper(newImg, 1159.09090909, 1500);
+          $('#demo-result').append(resultCanvas);
+          // var link = document.createElement('a');
+          // link.download = 'filename.jpg';
+          // link.href = resultCanvas.toDataURL('jpg')
+          // link.click();
+          // console.log(resultCanvas.toDataURL('jpg'));
+          // loadImageFromUrl(resultCanvas.toDataURL('jpg'));
+          resultCanvas.toBlob(function(blob) {
+            // Create a URL for the Blob
+            var blobURL = URL.createObjectURL(blob);
+            
+            // Pass the URL to Potrace LoadImageFromUrl
+            loadImageFromUrl(blobURL);
+          });
+          process(get_and_download_svg)
+          // const highlightedCanvas = scanner.highlightPaper(newImg)
+          // $('#demo-result').append(highlightedCanvas);
+      }
+  })
+  }
+}
+
+// Listen for changes in the file input
+const fileInput = document.getElementById("myFile");
+fileInput.addEventListener("change", handleFileUpload);
+

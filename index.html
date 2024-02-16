@@ -75,6 +75,12 @@
         Scan results will appear here
       </div>
     </div>
+    <div id="file-upload">
+      <form action="/upload", method="post", enctype="multipart/form-data">
+        <input type="file" id="myFile" name="image" accept="image/*">
+        <input type="submit" value="Upload Image">
+      </form>
+    </div>
     <br /><br />
     <hr />
   </div>
