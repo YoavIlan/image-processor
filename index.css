@@ -58,8 +58,10 @@ body {
 } 
 
 .button-container {
+  position: relative; /* Set position context for absolute positioning */
   display: flex;
   flex-direction: column;
+  align-items: center; /* Center the items vertically */
   gap: 10px;
 }
 
@@ -69,7 +71,7 @@ body {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
-  background-color: #4CAF50;
+  background-color: #1e85ff;
   color: white;
   cursor: pointer;
   text-align: center;
@@ -89,8 +91,43 @@ body {
 }
 
 .button-container label.custom-file-upload:hover,
+.file-upload-container, 
 .button-container input[type="submit"]:hover:not(:disabled) {
-  background-color: #45a049;
+  background-color: #4560a0;
+}
+.file-upload-wrapper {
+  display: flex;
+  align-items: center; /* Center the items vertically */
+  width: 100%; /* Take up the full width of the container */
+  margin-bottom: 10px; /* Add some space below the wrapper */
+}
+
+.custom-file-upload {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  width: 200px; /* Set a specific width */
+  height: 50px; /* Set a specific height */
+  line-height: 20px; /* Adjust line height */
+  font-size: 16px; /* Set a specific font size */
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+#uploadSuccess {
+  position: absolute; /* Position the message absolutely */
+  left: 50%; /* Position it to the right of the button */
+  transform: translateX(120px); /* Adjust the position */
+  color: #4CAF50; /* Green text */
+  font-size: 16px;
+}
+
+.hidden {
+  display: none;
 }
 
 #demo #demo-images .image-container {

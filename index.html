@@ -39,8 +39,11 @@
     <div id="file-upload">
       <form action="/upload", method="post", enctype="multipart/form-data">
         <div class="button-container">
-          <label for="myFile" class="custom-file-upload">Choose Image</label>
-          <input type="file" id="myFile" name="image" accept="image/*" hidden>
+          <div class="file-upload-wrapper">
+            <label for="myFile" class="custom-file-upload">Choose Image</label>
+            <div id="uploadSuccess" class="hidden">Image uploaded successfully!</div> <!-- Success message -->
+          </div>
+          <input type="file" id="myFile" name="image" accept="image/jpeg, image/png, image/jpg, image/bmp" hidden>
           <input type="submit" id="fileSubmit" value="Loading Resources..." disabled>
         </div>
       </form>

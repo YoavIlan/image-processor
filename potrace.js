@@ -1313,7 +1313,7 @@ window.onload = function() {
   loadOpenCV(function () {
     const submitBtn = document.getElementById('fileSubmit')
     submitBtn.disabled = false;
-    submitBtn.value = "Upload Image";
+    submitBtn.value = "Convert Image";
   })
 }
 
@@ -1415,9 +1415,9 @@ fileInput.addEventListener("click", handleFileUpload);
 document.getElementById('myFile').addEventListener('change', function(event){
   const file = event.target.files[0];
   if (file) {
-      document.getElementById('fileName').textContent = "File uploaded: " + file.name;
+    document.getElementById('uploadSuccess').classList.remove('hidden');
   } else {
-      document.getElementById('fileName').textContent = "";
+    document.getElementById('uploadSuccess').classList.add('hidden');
   }
 });
 
