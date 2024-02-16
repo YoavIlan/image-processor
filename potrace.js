@@ -1309,6 +1309,14 @@ let loadedOpenCV = false
 
 const openCvURL = "https://docs.opencv.org/4.7.0/opencv.js"
 
+window.onload = function() {
+  loadOpenCV(function () {
+    const submitBtn = document.getElementById('fileSubmit')
+    submitBtn.disabled = false;
+    submitBtn.value = "Upload Image";
+  })
+}
+
 function loadOpenCV(onComplete) {
     if (loadedOpenCV) {
         onComplete()
@@ -1341,74 +1349,75 @@ function get_and_download_svg() {
 }
 
 const scanner = new jscanify()
-$('#demo .image-container').click(function () {
-    $('.image-container.selected').removeClass('selected')
-    $(this).addClass('selected')
-    const imageSrc = $(this).find('img').data('url')
-    loadOpenCV(function () {
-        $('#demo-result').empty()
-
-        const newImg = document.createElement("img")
-        newImg.src = imageSrc
-
-        newImg.onload = function(){
-            const resultCanvas = scanner.extractPaper(newImg, 1159.09090909, 1500);
-            $('#demo-result').append(resultCanvas);
-            // var link = document.createElement('a');
-            // link.download = 'filename.jpg';
-            // link.href = resultCanvas.toDataURL('jpg')
-            // link.click();
-            // console.log(resultCanvas.toDataURL('jpg'));
-            // loadImageFromUrl(resultCanvas.toDataURL('jpg'));
-            resultCanvas.toBlob(function(blob) {
-              // Create a URL for the Blob
-              var blobURL = URL.createObjectURL(blob);
-              
-              // Pass the URL to Potrace LoadImageFromUrl
-              loadImageFromUrl(blobURL);
-            });
-            process(get_and_download_svg)
-            // const highlightedCanvas = scanner.highlightPaper(newImg)
-            // $('#demo-result').append(highlightedCanvas);
-        }
-    })
-})
 
 function handleFileUpload(event) {
-  const file = event.target.files[0];
+  event.preventDefault();
+  console.log('handleFileUpload')
+  const file = document.getElementById('myFile').files[0];
   if(file) {
+    console.log('file found') 
+    // Show the progress bar and initialize progress to 0
+    const progressBar = document.getElementById('upload-progress-bar');
+    progressBar.style.width = '0%';
+    document.getElementById('upload-progress-container').style.display = 'block';
+
+    // Simulate progress
+    let progress = 0;
+    const progressInterval = setInterval(() => {
+      progress += 20;
+      progressBar.style.width = `${progress}%`;
+
+      // Clear interval if progress is 100%
+      if (progress >= 100) clearInterval(progressInterval);
+    }, 100);
+
     const imageUrl = URL.createObjectURL(file);
-    loadOpenCV(function () {
-      $('#demo-result').empty()
+    const newImg = document.createElement("img")
+    newImg.src = imageUrl
 
-      const newImg = document.createElement("img")
-      newImg.src = imageUrl
+    newImg.onload = function(){
+      const resultCanvas = scanner.extractPaper(newImg, 1159.09090909, 1500);
+      resultCanvas.toBlob(function(blob) {
+        // Create a URL for the Blob
+        var blobURL = URL.createObjectURL(blob);
+        // Pass the URL to Potrace LoadImageFromUrl
+        loadImageFromUrl(blobURL);
+      });
+      process(get_and_download_svg)
 
-      newImg.onload = function(){
-          const resultCanvas = scanner.extractPaper(newImg, 1159.09090909, 1500);
-          $('#demo-result').append(resultCanvas);
-          // var link = document.createElement('a');
-          // link.download = 'filename.jpg';
-          // link.href = resultCanvas.toDataURL('jpg')
-          // link.click();
-          // console.log(resultCanvas.toDataURL('jpg'));
-          // loadImageFromUrl(resultCanvas.toDataURL('jpg'));
-          resultCanvas.toBlob(function(blob) {
-            // Create a URL for the Blob
-            var blobURL = URL.createObjectURL(blob);
-            
-            // Pass the URL to Potrace LoadImageFromUrl
-            loadImageFromUrl(blobURL);
-          });
-          process(get_and_download_svg)
-          // const highlightedCanvas = scanner.highlightPaper(newImg)
-          // $('#demo-result').append(highlightedCanvas);
-      }
-  })
+      // Hide the progress bar
+      document.getElementById('upload-progress-container').style.display = 'none';
+      // clear the file upload
+      document.getElementById('myFile').value = '';
+    }
+  }
+  else {
+    // Create a toast notification
+    let toast = document.createElement("div");
+    toast.textContent = "Please upload a file.";
+    toast.className = "toast"; // Assign a class to the toast
+    document.body.appendChild(toast);
+    // Animate the toast to slide up
+    setTimeout(function() {
+      toast.style.bottom = "20px";
+    }, 0);
+    // Remove the toast after 3 seconds
+    setTimeout(function() {
+      document.body.removeChild(toast);
+    }, 3000);
   }
 }
 
 // Listen for changes in the file input
-const fileInput = document.getElementById("myFile");
-fileInput.addEventListener("change", handleFileUpload);
+const fileInput = document.getElementById("fileSubmit");
+fileInput.addEventListener("click", handleFileUpload);
+
+document.getElementById('myFile').addEventListener('change', function(event){
+  const file = event.target.files[0];
+  if (file) {
+      document.getElementById('fileName').textContent = "File uploaded: " + file.name;
+  } else {
+      document.getElementById('fileName').textContent = "";
+  }
+});
 
