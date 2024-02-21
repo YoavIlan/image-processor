@@ -148,11 +148,17 @@ body {
   height: 15px; /* Specified height */
   background: #cccccc; /* Grey background */
 }
-.slider-container label {
+
+.slider-container {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   width: 100%;
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px; /* Add some space below the labels */
 }
 
 .slider:disabled {
