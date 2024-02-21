@@ -34,12 +34,13 @@ body {
 }
 
 #content {
-  max-width: 700px;
+  max-width: 900px;
   margin: auto;
   margin-top: 30px;
   padding: 0 30px;
   padding-bottom: 30px;
 }
+
 .toast {
   position: fixed;
   bottom: -50px; /* Start position off screen */
@@ -57,12 +58,24 @@ body {
   transition: bottom 0.2s ease-out; /* Add transition */
 } 
 
+#imageArea {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#outputImage {
+  width: 50%; /* Half of the #imageArea div */
+  height: auto; /* Adjust the height automatically */
+  aspect-ratio: 8.5 / 11; /* Maintain the aspect ratio */
+  object-fit: contain; /* To maintain aspect ratio of the image */
+}
+
 .button-container {
-  position: relative; /* Set position context for absolute positioning */
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center the items vertically */
   gap: 10px;
+  justify-content: space-between;
 }
 
 .button-container label.custom-file-upload,
@@ -95,9 +108,11 @@ body {
 .button-container input[type="submit"]:hover:not(:disabled) {
   background-color: #4560a0;
 }
+
 .file-upload-wrapper {
   display: flex;
   align-items: center; /* Center the items vertically */
+  justify-content: space-between;
   width: 100%; /* Take up the full width of the container */
   margin-bottom: 10px; /* Add some space below the wrapper */
 }
@@ -119,15 +134,36 @@ body {
 }
 
 #uploadSuccess {
-  position: absolute; /* Position the message absolutely */
-  left: 50%; /* Position it to the right of the button */
-  transform: translateX(120px); /* Adjust the position */
+  margin-left: 10px; /* Add some space to the left of the message */
   color: #4CAF50; /* Green text */
   font-size: 16px;
 }
 
 .hidden {
   display: none;
+}
+
+.slider {
+  width: 100%; /* Full width */
+  height: 15px; /* Specified height */
+  background: #cccccc; /* Grey background */
+}
+
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px; /* Add some space below the labels */
+}
+
+.slider:disabled {
+  background: #cccccc; /* Gray background */
+  cursor: not-allowed; /* Change cursor */
 }
 
 #demo #demo-images .image-container {

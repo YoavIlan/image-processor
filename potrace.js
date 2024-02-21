@@ -1303,25 +1303,32 @@ var Potrace = (function() {
   };
 })();
 
-const { loadImageFromUrl, process, getSVG } = Potrace;
+// Start of our code
+
+const { loadImageFromUrl, process, getSVG, setParameter } = Potrace;
 
 let loadedOpenCV = false
 
+// openCV URL
 const openCvURL = "https://docs.opencv.org/4.7.0/opencv.js"
 
+// Load OpenCV on window load
 window.onload = function() {
   loadOpenCV(function () {
     const submitBtn = document.getElementById('fileSubmit')
     submitBtn.disabled = false;
     submitBtn.value = "Convert Image";
+    // initial smoothness parameter
+    setParameter({alphamax: 0})
   })
+
 }
 
+// Load OpenCV function called on window load
 function loadOpenCV(onComplete) {
     if (loadedOpenCV) {
         onComplete()
     } else {
-        $('#demo-result').text('Loading OpenCV...')
         const script = document.createElement("script")
         script.src = openCvURL
 
@@ -1335,10 +1342,21 @@ function loadOpenCV(onComplete) {
     }
 }
 
+// global url of jscanified image
+var blobURL = null;
+
+// function to get and download svg
+// not currently used
+// TODO: update to download svg on download button click
 function get_and_download_svg() {
   const svg = getSVG(1);
   const blob = new Blob([svg], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
 
+  const img = document.createElement('img');
+  img.src = url;
+  
+  document.body.appendChild(img);
   const downloadLink = document.createElement('a');
   downloadLink.href = URL.createObjectURL(blob);
   downloadLink.download = 'your_image.svg';
@@ -1348,14 +1366,26 @@ function get_and_download_svg() {
   document.body.removeChild(downloadLink);
 }
 
+// function to get svg and display it
+function get_svg() {
+  const svg = getSVG(1);
+  const blob = new Blob([svg], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+
+  document.getElementById('outputImage').src = url;
+  document.getElementById('myRange').disabled = false;
+}
+
+// jscanify object
 const scanner = new jscanify()
 
+// function to handle convert image button
 function handleFileUpload(event) {
+  // prevent default form submission
   event.preventDefault();
-  console.log('handleFileUpload')
+  // get uploaded file
   const file = document.getElementById('myFile').files[0];
   if(file) {
-    console.log('file found') 
     // Show the progress bar and initialize progress to 0
     const progressBar = document.getElementById('upload-progress-bar');
     progressBar.style.width = '0%';
@@ -1371,19 +1401,22 @@ function handleFileUpload(event) {
       if (progress >= 100) clearInterval(progressInterval);
     }, 100);
 
+    // Create a URL for the image in the file and load into image element
     const imageUrl = URL.createObjectURL(file);
     const newImg = document.createElement("img")
     newImg.src = imageUrl
-
+    // once loaded, jscanfiy and load into Potrace
     newImg.onload = function(){
       const resultCanvas = scanner.extractPaper(newImg, 1159.09090909, 1500);
+      // canvas to blob allows for Potrace to process the image
       resultCanvas.toBlob(function(blob) {
         // Create a URL for the Blob
-        var blobURL = URL.createObjectURL(blob);
+        blobURL = URL.createObjectURL(blob);
         // Pass the URL to Potrace LoadImageFromUrl
         loadImageFromUrl(blobURL);
       });
-      process(get_and_download_svg)
+      // process(get_and_download_svg)
+      process(get_svg)
 
       // Hide the progress bar
       document.getElementById('upload-progress-container').style.display = 'none';
@@ -1391,6 +1424,7 @@ function handleFileUpload(event) {
       document.getElementById('myFile').value = '';
     }
   }
+  // If no file is uploaded and convert is clicked
   else {
     // Create a toast notification
     let toast = document.createElement("div");
@@ -1408,16 +1442,31 @@ function handleFileUpload(event) {
   }
 }
 
-// Listen for changes in the file input
+// Listen for convert file button click
 const fileInput = document.getElementById("fileSubmit");
 fileInput.addEventListener("click", handleFileUpload);
 
-document.getElementById('myFile').addEventListener('change', function(event){
+// Get the file input element
+const fileUpload = document.getElementById('myFile');
+
+// Add an event listener for when a file is selected
+fileUpload.addEventListener('change', function(event) {
+  // Get the selected file
   const file = event.target.files[0];
-  if (file) {
-    document.getElementById('uploadSuccess').classList.remove('hidden');
-  } else {
-    document.getElementById('uploadSuccess').classList.add('hidden');
-  }
+
+  // Create a URL for the file
+  const imageUrl = URL.createObjectURL(file);
+  document.getElementById('outputImage').src = imageUrl; 
+  // myRange disabled
+  document.getElementById('myRange').disabled = true;
 });
 
+// slider event listener to update smoothness
+const slider = document.getElementById('myRange');
+slider.addEventListener('change', function() {
+  const value = slider.value / 1000;
+  console.log(value);
+  setParameter({alphamax: value});
+  loadImageFromUrl(blobURL);
+  process(get_svg);
+});

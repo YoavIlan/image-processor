@@ -36,23 +36,31 @@
     <div id="demo-title">
       <h1>Upload Image below</h1>
     </div>
-    <div id="file-upload">
-      <form action="/upload", method="post", enctype="multipart/form-data">
-        <div class="button-container">
-          <div class="file-upload-wrapper">
-            <label for="myFile" class="custom-file-upload">Choose Image</label>
-            <div id="uploadSuccess" class="hidden">Image uploaded successfully!</div> <!-- Success message -->
-          </div>
-          <input type="file" id="myFile" name="image" accept="image/jpeg, image/png, image/jpg, image/bmp" hidden>
-          <input type="submit" id="fileSubmit" value="Loading Resources..." disabled>
-        </div>
-      </form>
-
-      <div id="upload-progress-container" style="display: none; width: 100%; background-color: #f3f3f3; border-radius: 20px;">
-        <div id="upload-progress-bar" style="height: 20px; width: 0%; background-color: #4CAF50; transition: width 0.4s ease-in-out;
-        border-radius: 20px; margin-top: 20px;"></div>
+    <div id="imageArea">
+      <img id="outputImage" src="" alt="Image will appear here.">
+      <div id="file-upload">
+        <form action="/upload", method="post", enctype="multipart/form-data">
+            <div class="button-container">
+              <div class="file-upload-wrapper">
+                <label for="myFile" class="custom-file-upload">Choose Image</label>
+              </div>
+              <input type="file" id="myFile" name="image" accept="image/jpeg, image/png, image/jpg, image/bmp" hidden>
+              <input type="submit" id="fileSubmit" value="Loading Resources..." disabled>
+              <div class="slider-container">
+                <div class="slider-labels">
+                  <span>Sharp</span>
+                  <span>Smooth</span>
+                </div>
+                <input type="range" min="1" max="5000" value="1" class="slider" id="myRange" disabled>
+              </div>
+            </div>
+        </form>
       </div>
     </div>
+    <div id="upload-progress-container" style="display: none; width: 100%; background-color: #f3f3f3; border-radius: 20px;">
+      <div id="upload-progress-bar" style="height: 20px; width: 0%; background-color: #4CAF50; transition: width 0.4s ease-in-out;
+      border-radius: 20px; margin-top: 20px;"></div>
+    </div>   
     <br /><br />
     <hr />
   </div>
