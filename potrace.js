@@ -1303,7 +1303,7 @@ var Potrace = (function() {
   };
 })();
 
-const { loadImageFromUrl, process, getSVG } = Potrace;
+const { loadImageFromUrl, process, getSVG, setParameter } = Potrace;
 
 let loadedOpenCV = false
 
@@ -1315,13 +1315,13 @@ window.onload = function() {
     submitBtn.disabled = false;
     submitBtn.value = "Convert Image";
   })
+  setParameter({alphamax: 5});
 }
 
 function loadOpenCV(onComplete) {
     if (loadedOpenCV) {
         onComplete()
     } else {
-        $('#demo-result').text('Loading OpenCV...')
         const script = document.createElement("script")
         script.src = openCvURL
 
@@ -1338,7 +1338,12 @@ function loadOpenCV(onComplete) {
 function get_and_download_svg() {
   const svg = getSVG(1);
   const blob = new Blob([svg], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
 
+  const img = document.createElement('img');
+  img.src = url;
+  
+  document.body.appendChild(img);
   const downloadLink = document.createElement('a');
   downloadLink.href = URL.createObjectURL(blob);
   downloadLink.download = 'your_image.svg';
@@ -1346,6 +1351,15 @@ function get_and_download_svg() {
   document.body.appendChild(downloadLink);
   downloadLink.click();
   document.body.removeChild(downloadLink);
+}
+
+function get_svg() {
+  const svg = getSVG(1);
+  const blob = new Blob([svg], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+
+  document.getElementById('outputImage').src = url;
+  document.getElementById('myRange').disabled = false;
 }
 
 const scanner = new jscanify()
@@ -1383,7 +1397,8 @@ function handleFileUpload(event) {
         // Pass the URL to Potrace LoadImageFromUrl
         loadImageFromUrl(blobURL);
       });
-      process(get_and_download_svg)
+      // process(get_and_download_svg)
+      process(get_svg)
 
       // Hide the progress bar
       document.getElementById('upload-progress-container').style.display = 'none';
@@ -1412,12 +1427,20 @@ function handleFileUpload(event) {
 const fileInput = document.getElementById("fileSubmit");
 fileInput.addEventListener("click", handleFileUpload);
 
-document.getElementById('myFile').addEventListener('change', function(event){
-  const file = event.target.files[0];
-  if (file) {
-    document.getElementById('uploadSuccess').classList.remove('hidden');
-  } else {
-    document.getElementById('uploadSuccess').classList.add('hidden');
-  }
-});
 
+
+// Get the file input element
+const fileUpload = document.getElementById('myFile');
+
+
+// Add an event listener for when a file is selected
+fileUpload.addEventListener('change', function(event) {
+  // Get the selected file
+  const file = event.target.files[0];
+
+  // Create a URL for the file
+  const imageUrl = URL.createObjectURL(file);
+  document.getElementById('outputImage').src = imageUrl; 
+  // myRange disabled
+  document.getElementById('myRange').disabled = true;
+});
