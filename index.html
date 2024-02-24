@@ -11,25 +11,20 @@
   <meta property="og:description" content="Image vectorizer into SVG complete with parallax effect mitigation" />
   <meta property="og:locale" content="en_US" />
   <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
 </head>
 
 <body>
-  <!-- create a beautiful landing page that explains that this is an image vectorizer that will take any image and transform it into an SVG format -->
   <div id="header">
     <h1>Image Vectorizer</h1>
     <p>Image vectorizer into SVG complete with parallax effect mitigation</p>
   </div>
   <div id="content">
-    <!-- explain that this was created as a project by students at the university of texas for the Austin School for the Driven -->
     <div id="about">
       <h1>About</h1>
-      <p>This project was created as a project by students at the University of Texas for the Austin School for the
-        Driven.</p>
-    <!-- Explain that this tool will accept any bitmap image, correct for minor parallax issues, and download an svg output   -->
+      <p>This project was created as a project by students at the University of Texas for the Austin School for the Driven.</p>
       <h1>How it works</h1>
-      <p>This tool will accept any bitmap image, correct for minor parallax issues, and download an svg output.
-        Simply upload an image and the tool will do the rest.</p>
-      </p>
+      <p>This tool will accept any bitmap image, correct for minor parallax issues, and download an svg output. Simply upload an image and the tool will do the rest.</p>
     </div>
     <br /><br />
     <hr />
@@ -39,27 +34,26 @@
     <div id="imageArea">
       <img id="outputImage" src="" alt="Image will appear here.">
       <div id="file-upload">
-        <form action="/upload", method="post", enctype="multipart/form-data">
-            <div class="button-container">
-              <div class="file-upload-wrapper">
-                <label for="myFile" class="custom-file-upload">Choose Image</label>
-              </div>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+          <div class="button-container">
+            <div class="file-upload-wrapper">
+              <label for="myFile" class="custom-file-upload">Choose Image</label>
               <input type="file" id="myFile" name="image" accept="image/jpeg, image/png, image/jpg, image/bmp" hidden>
               <input type="submit" id="fileSubmit" value="Loading Resources..." disabled>
-              <div class="slider-container">
-                <div class="slider-labels">
-                  <span>Sharp</span>
-                  <span>Smooth</span>
-                </div>
-                <input type="range" min="1" max="5000" value="1" class="slider" id="myRange" disabled>
-              </div>
             </div>
+            <div class="slider-container">
+              <div class="slider-labels">
+                <span>Sharp</span>
+                <span>Smooth</span>
+              </div>
+              <input type="range" min="1" max="5000" value="1" class="slider" id="myRange" disabled>
+            </div>
+          </div>
         </form>
       </div>
     </div>
     <div id="upload-progress-container" style="display: none; width: 100%; background-color: #f3f3f3; border-radius: 20px;">
-      <div id="upload-progress-bar" style="height: 20px; width: 0%; background-color: #4CAF50; transition: width 0.4s ease-in-out;
-      border-radius: 20px; margin-top: 20px;"></div>
+      <div id="upload-progress-bar" style="height: 20px; width: 0%; background-color: #4CAF50; transition: width 0.4s ease-in-out; border-radius: 20px; margin-top: 20px;"></div>
     </div>   
     <br /><br />
     <hr />
@@ -67,20 +61,7 @@
   <script src="https://cdn.jsdelivr.net/gh/ColonelParrot/jscanify@latest/src/jscanify.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="potrace.js"></script>
-
-
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"
-    integrity="sha512-bgHRAiTjGrzHzLyKOnpFvaEpGzJet3z4tZnXGjpsCcqOnAH6VGUx9frc5bcIhKTVLEiCO6vEhNAgx5jtLUYrfA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" async></script>
-  <script>
-    $(window).on('load', function () {
-      hljs.highlightAll();
-    })
-  </script>
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/a11y-light.min.css"
-    integrity="sha512-WDk6RzwygsN9KecRHAfm9HTN87LQjqdygDmkHSJxVkVI7ErCZ8ZWxP6T8RvBujY1n2/E4Ac+bn2ChXnp5rnnHA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 </body>
 
 </html>
