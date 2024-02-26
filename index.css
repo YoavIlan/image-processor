@@ -60,8 +60,9 @@ body {
 
 #imageArea {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  margin: auto;
 }
 
 #outputImage {
@@ -150,6 +151,7 @@ body {
 }
 
 .slider-container {
+  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
   width: 100%;

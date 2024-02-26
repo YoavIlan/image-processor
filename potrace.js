@@ -1317,6 +1317,7 @@ window.onload = function() {
         submitBtn.disabled = false;
         submitBtn.value = "Convert Image";
         setParameter({alphamax: 0});
+        document.getElementById('myRange').disabled = true;
     });
 };
 
@@ -1370,6 +1371,7 @@ function handleFileUpload(event) {
                     const fileSubmitButton = document.getElementById('fileSubmit');
                     fileSubmitButton.value = "Crop Image";
                     fileSubmitButton.onclick = cropImage;
+                    document.getElementById('myRange').disabled = false;
                 });
             });
         }
@@ -1396,6 +1398,11 @@ function get_svg() {
     const url = URL.createObjectURL(blob);
 
     document.getElementById('outputImage').src = url;
+    outputImage.src = url;
+    outputImage.style.width = '50%'; 
+    outputImage.style.height = 'auto';
+    outputImage.style.objectFit = 'contain';
+    outputImage.style.aspectRatio = '8.5 / 11';
     document.getElementById('myRange').disabled = false;
 }
 
@@ -1417,20 +1424,30 @@ function get_and_download_svg() {
   document.body.removeChild(downloadLink);
 }
 
+let croppedImageDataURL = null;
+
 function cropImage() {
     if (!cropper) {
         return;
     }
 
     const croppedCanvas = cropper.getCroppedCanvas();
-    document.getElementById('outputImage').src = croppedCanvas.toDataURL();
+    croppedImageDataURL = croppedCanvas.toDataURL(); // Store the cropped image data URL
+    document.getElementById('outputImage').src = croppedImageDataURL;
 
     cropper.destroy();
     cropper = null;
 
     const fileSubmitButton = document.getElementById('fileSubmit');
-    fileSubmitButton.value = "Convert Image";
+    fileSubmitButton.value = "Crop Image";
+    fileSubmitButton.disabled = true; // Disable the button
     fileSubmitButton.onclick = handleFileUpload;
+
+    const downloadButton = document.getElementById('downloadButton');
+    downloadButton.disabled = false;
+    downloadButton.addEventListener('click', get_and_download_svg);
+
+    document.getElementById('myRange').disabled = true; // Disable slider after cropping
 }
 
 const fileUpload = document.getElementById('myFile');
