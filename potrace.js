@@ -1303,14 +1303,18 @@ var Potrace = (function() {
   };
 })();
 
+// Start of our code
+
 const { loadImageFromUrl, process, getSVG, setParameter } = Potrace;
 
 let loadedOpenCV = false;
 let cropper; // Cropper instance
 let blobURL = null; // global url of jscanified image
 
+// openCV URL
 const openCvURL = "https://docs.opencv.org/4.7.0/opencv.js";
 
+// Load OpenCV on window load
 window.onload = function() {
     loadOpenCV(function() {
         const submitBtn = document.getElementById('fileSubmit');
@@ -1321,6 +1325,7 @@ window.onload = function() {
     });
 };
 
+// Load OpenCV function called on window load
 function loadOpenCV(onComplete) {
     if (loadedOpenCV) {
         onComplete();
@@ -1337,61 +1342,92 @@ function loadOpenCV(onComplete) {
     }
 }
 
+// function to handle convert image button
 function handleFileUpload(event) {
+    // prevent default form submission
     event.preventDefault();
+    // get uploaded file
     const file = document.getElementById('myFile').files[0];
     if (file) {
+        // Show the progress bar and initialize progress to 0
         const progressBar = document.getElementById('upload-progress-bar');
         progressBar.style.width = '0%';
         document.getElementById('upload-progress-container').style.display = 'block';
 
+        // Simulate progress
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            progress += 20;
+            progressBar.style.width = `${progress}%`;
+
+            // Clear interval if progress is 100%
+            if (progress >= 100) clearInterval(progressInterval);
+        }, 100);
+
+        // Create a URL for the image in the file and load into image element
         const imageUrl = URL.createObjectURL(file);
         const newImg = document.createElement("img");
         newImg.src = imageUrl;
-
+        // once loaded, jscanfiy and load into Potrace
         newImg.onload = function() {
             const scanner = new jscanify();
+            // canvas to blob allows for Potrace to process the image
             const resultCanvas = scanner.extractPaper(newImg, 1159.09090909, 1500);
             resultCanvas.toBlob(function(blob) {
+                // Create a URL for the Blob
                 blobURL = URL.createObjectURL(blob);
+                // Pass the URL to Potrace LoadImageFromUrl
                 loadImageFromUrl(blobURL);
+                // process(get_and_download_svg)
 
                 process(function() {
                     get_svg();
                     console.log("Image processed");
 
+                    // check if a cropper instance already exists, ff it exists, destroy the previous instance
                     if (cropper) cropper.destroy();
+                    // initialize a new cropper instance on the output image
                     cropper = new Cropper(document.getElementById('outputImage'), {
-                        aspectRatio: NaN,
+                        aspectRatio: NaN, //NaN for free-form cropping
                         viewMode: 1,
-                        autoCropArea: 1,
+                        autoCropArea: 1, // automatically crop the area to 100% of the image size
                         responsive: true,
                     });
 
                     const fileSubmitButton = document.getElementById('fileSubmit');
+                    // Change the button's displayed text to "Crop Image"
                     fileSubmitButton.value = "Crop Image";
                     fileSubmitButton.onclick = cropImage;
+                    // Enable the slider
                     document.getElementById('myRange').disabled = false;
                 });
             });
         }
 
+        // Hide the progress bar
         document.getElementById('upload-progress-container').style.display = 'none';
+        // clear the file upload
         document.getElementById('myFile').value = '';
-    } else {
+    } 
+    // If no file is uploaded and convert is clicked
+    else {
         createToastNotification("Please upload a file.");
     }
 }
 
+// Create a toast notification
 function createToastNotification(message) {
     let toast = document.createElement("div");
     toast.textContent = message;
-    toast.className = "toast";
+    toast.className = "toast"; // Assign a class to the toast
     document.body.appendChild(toast);
+    // Animate the toast to slide up
     setTimeout(function() { toast.style.bottom = "20px"; }, 0);
+    // Remove the toast after 3 seconds
     setTimeout(function() { document.body.removeChild(toast); }, 3000);
 }
 
+// function to get svg and display it
 function get_svg() {
     const svg = getSVG(1);
     const blob = new Blob([svg], { type: 'image/svg+xml' });
@@ -1406,6 +1442,9 @@ function get_svg() {
     document.getElementById('myRange').disabled = false;
 }
 
+// function to get and download svg
+// not currently used
+// TODO: update to download svg on download button click
 function get_and_download_svg() {
   const svg = getSVG(1);
   const blob = new Blob([svg], { type: 'image/svg+xml' });
@@ -1431,12 +1470,12 @@ function cropImage() {
         return;
     }
 
-    const croppedCanvas = cropper.getCroppedCanvas();
+    const croppedCanvas = cropper.getCroppedCanvas(); // Get canvas of cropped image
     croppedImageDataURL = croppedCanvas.toDataURL(); // Store the cropped image data URL
-    document.getElementById('outputImage').src = croppedImageDataURL;
+    document.getElementById('outputImage').src = croppedImageDataURL; // Update displayed image
 
-    cropper.destroy();
-    cropper = null;
+    cropper.destroy(); // Cleanup cropper
+    cropper = null; // Reset cropper variable
 
     const fileSubmitButton = document.getElementById('fileSubmit');
     fileSubmitButton.value = "Crop Image";
@@ -1444,24 +1483,31 @@ function cropImage() {
     fileSubmitButton.onclick = handleFileUpload;
 
     const downloadButton = document.getElementById('downloadButton');
-    downloadButton.disabled = false;
-    downloadButton.addEventListener('click', get_and_download_svg);
+    downloadButton.disabled = false; 
+    // Download cropped image as svg
+    //downloadButton.addEventListener('click', get_and_download_svg);
 
     document.getElementById('myRange').disabled = true; // Disable slider after cropping
 }
 
+// Get the file input element
 const fileUpload = document.getElementById('myFile');
+// Add an event listener for when a file is selected
 fileUpload.addEventListener('change', function(event) {
+    // Get the selected file
     const file = event.target.files[0];
     if (file) {
+        // Create a URL for the file
         const imageUrl = URL.createObjectURL(file);
         document.getElementById('outputImage').src = imageUrl;
     }
 });
 
+// Listen for convert file button click
 const fileInput = document.getElementById("fileSubmit");
 fileInput.addEventListener("click", handleFileUpload);
 
+// slider event listener to update smoothness
 const slider = document.getElementById('myRange');
 slider.addEventListener('change', function() {
     const value = this.value / 1000;
