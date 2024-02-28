@@ -1307,7 +1307,8 @@ var Potrace = (function() {
 
 const { loadImageFromUrl, process, getSVG, setParameter } = Potrace;
 
-let loadedOpenCV = false
+let loadedOpenCV = false;
+let cropper;
 
 // openCV URL
 const openCvURL = "https://docs.opencv.org/4.7.0/opencv.js"
@@ -1401,65 +1402,149 @@ function handleFileUpload(event) {
       if (progress >= 100) clearInterval(progressInterval);
     }, 100);
 
-    // Create a URL for the image in the file and load into image element
-    const imageUrl = URL.createObjectURL(file);
-    const newImg = document.createElement("img")
-    newImg.src = imageUrl
-    // once loaded, jscanfiy and load into Potrace
-    newImg.onload = function(){
-      const resultCanvas = scanner.extractPaper(newImg, 1159.09090909, 1500);
-      // canvas to blob allows for Potrace to process the image
-      resultCanvas.toBlob(function(blob) {
-        // Create a URL for the Blob
-        blobURL = URL.createObjectURL(blob);
-        // Pass the URL to Potrace LoadImageFromUrl
-        loadImageFromUrl(blobURL);
-      });
-      // process(get_and_download_svg)
-      process(get_svg)
+        // Create a URL for the image in the file and load into image element
+        const imageUrl = URL.createObjectURL(file);
+        const newImg = document.createElement("img");
+        newImg.src = imageUrl;
+        // once loaded, jscanfiy and load into Potrace
+        newImg.onload = function() {
+            const scanner = new jscanify();
+            // canvas to blob allows for Potrace to process the image
+            const resultCanvas = scanner.extractPaper(newImg, 1159.09090909, 1500);
+            resultCanvas.toBlob(function(blob) {
+                // Create a URL for the Blob
+                blobURL = URL.createObjectURL(blob);
+                // Pass the URL to Potrace LoadImageFromUrl
+                loadImageFromUrl(blobURL);
+                // process(get_and_download_svg)
 
-      // Hide the progress bar
-      document.getElementById('upload-progress-container').style.display = 'none';
-      // clear the file upload
-      document.getElementById('myFile').value = '';
+                process(function() {
+                    get_svg();
+                    // Enable editing
+                    document.getElementById('cropImage').disabled = false;
+                    document.getElementById('myRange').disabled = false;
+                });
+            });
+        }
+
+        // Hide the progress bar
+        document.getElementById('upload-progress-container').style.display = 'none';
+        // clear the file upload
+        document.getElementById('myFile').value = '';
+
+        // allow download
+        document.getElementById('downloadButton').disabled = false;
+    } 
+    // If no file is uploaded and convert is clicked
+    else {
+        createToastNotification("Please upload a file.");
     }
-  }
-  // If no file is uploaded and convert is clicked
-  else {
-    // Create a toast notification
-    let toast = document.createElement("div");
-    toast.textContent = "Please upload a file.";
-    toast.className = "toast"; // Assign a class to the toast
-    document.body.appendChild(toast);
-    // Animate the toast to slide up
-    setTimeout(function() {
-      toast.style.bottom = "20px";
-    }, 0);
-    // Remove the toast after 3 seconds
-    setTimeout(function() {
-      document.body.removeChild(toast);
-    }, 3000);
-  }
 }
+
+function handleCropImage(event) {
+  event.preventDefault();
+  // disable all buttons except crop button
+  document.getElementById('fileSubmit').disabled = true;
+  document.getElementById('downloadButton').disabled = true;
+  document.getElementById('myRange').disabled = true;
+  document.getElementById('myFile').disabled = true;
+
+  // check if a cropper instance already exists, ff it exists, destroy the previous instance
+  if (this.cropper) cropper.destroy();
+  // initialize a new cropper instance on the output image
+  this.cropper = new Cropper(document.getElementById('outputImage'), {
+      aspectRatio: 8.5/11, //NaN for free-form cropping
+      viewMode: 1,
+      autoCropArea: 1, // automatically crop the area to 100% of the image size
+      responsive: true,
+  });
+  const cropImageButton = document.getElementById('cropImage');
+  cropImageButton.removeEventListener('click', handleCropImage);
+  cropImageButton.value = "Finish";
+  cropImageButton.onclick = cropImage;
+
+}
+
+// Create a toast notification
+function createToastNotification(message) {
+  let toast = document.createElement("div");
+  toast.textContent = "Please upload a file.";
+  toast.className = "toast"; // Assign a class to the toast
+  document.body.appendChild(toast);
+  // Animate the toast to slide up
+  setTimeout(function() {
+    toast.style.bottom = "20px";
+  }, 0);
+  // Remove the toast after 3 seconds
+  setTimeout(function() {
+    document.body.removeChild(toast);
+  }, 3000);
+}
+
+// function to get and download svg
+// not currently used
+// TODO: update to download svg on download button click
+function download_svg(event) {
+  event.preventDefault(); 
+  // const svg = getSVG(1);
+  // const blob = new Blob([svg], { type: 'image/svg+xml' });
+  // const url = URL.createObjectURL(blob);
+
+  // const img = document.createElement('img');
+  // img.src = url;
+  
+  // document.body.appendChild(img);
+  const outputImage = document.getElementById('outputImage');
+  const downloadLink = document.createElement('a');
+  downloadLink.href = outputImage.src
+  downloadLink.download = 'your_image.svg';
+
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
+}
+
+let croppedImageDataURL = null;
+
+function cropImage(event) {
+    event.preventDefault();
+    if (!this.cropper) {
+        return;
+    }
+    const croppedCanvas = this.cropper.getCroppedCanvas(); // Get canvas of cropped image
+    croppedImageDataURL = croppedCanvas.toDataURL(); // Store the cropped image data URL
+    document.getElementById('outputImage').src = croppedImageDataURL; // Update displayed image
+
+    this.cropper.destroy(); // Cleanup cropper
+    this.cropper = null; // Reset cropper variable
+    const cropImageButton = document.getElementById('cropImage');
+    cropImageButton.removeEventListener('click', cropImage);
+    cropImageButton.value = "Crop Image";
+    cropImageButton.onclick = handleCropImage;
+
+    document.getElementById('fileSubmit').disabled = false;
+    document.getElementById('downloadButton').disabled = false;
+    document.getElementById('myRange').disabled = false;
+    document.getElementById('myFile').disabled = false;
+
+}
+
+// Add an event listener for when a file is selected
+const fileUpload = document.getElementById('myFile');
+// Add an event listener for when a file is selected
+fileUpload.addEventListener('change', function(event) {
+    // Get the selected file
+    const file = event.target.files[0];
+    if (file) {
+        // Create a URL for the file
+        const imageUrl = URL.createObjectURL(file);
+        document.getElementById('outputImage').src = imageUrl;
+    }
+});
 
 // Listen for convert file button click
 const fileInput = document.getElementById("fileSubmit");
 fileInput.addEventListener("click", handleFileUpload);
-
-// Get the file input element
-const fileUpload = document.getElementById('myFile');
-
-// Add an event listener for when a file is selected
-fileUpload.addEventListener('change', function(event) {
-  // Get the selected file
-  const file = event.target.files[0];
-
-  // Create a URL for the file
-  const imageUrl = URL.createObjectURL(file);
-  document.getElementById('outputImage').src = imageUrl; 
-  // myRange disabled
-  document.getElementById('myRange').disabled = true;
-});
 
 // slider event listener to update smoothness
 const slider = document.getElementById('myRange');
@@ -1470,3 +1555,11 @@ slider.addEventListener('change', function() {
   loadImageFromUrl(blobURL);
   process(get_svg);
 });
+
+// Cropper event listener
+const cropButton = document.getElementById('cropImage');
+cropButton.addEventListener('click', handleCropImage);
+
+// Download button event listener
+const downloadButton = document.getElementById('downloadButton');
+downloadButton.addEventListener('click', download_svg);
