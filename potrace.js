@@ -1325,7 +1325,10 @@ window.onload = function() {
 
 }
 
-// Load OpenCV function called on window load
+/**
+ * Load openCV to remove parallax effects
+ * @param {function} onComplete the function to run after OpenCV is loaded
+ */
 function loadOpenCV(onComplete) {
     if (loadedOpenCV) {
         onComplete()
@@ -1346,28 +1349,9 @@ function loadOpenCV(onComplete) {
 // global url of jscanified image
 var blobURL = null;
 
-// function to get and download svg
-// not currently used
-// TODO: update to download svg on download button click
-function get_and_download_svg() {
-  const svg = getSVG(1);
-  const blob = new Blob([svg], { type: 'image/svg+xml' });
-  const url = URL.createObjectURL(blob);
-
-  const img = document.createElement('img');
-  img.src = url;
-  
-  document.body.appendChild(img);
-  const downloadLink = document.createElement('a');
-  downloadLink.href = URL.createObjectURL(blob);
-  downloadLink.download = 'your_image.svg';
-
-  document.body.appendChild(downloadLink);
-  downloadLink.click();
-  document.body.removeChild(downloadLink);
-}
-
-// function to get svg and display it
+/**
+ * Return the SVG of an image from Potrace
+ */
 function get_svg() {
   const svg = getSVG(1);
   const blob = new Blob([svg], { type: 'image/svg+xml' });
@@ -1380,7 +1364,10 @@ function get_svg() {
 // jscanify object
 const scanner = new jscanify()
 
-// function to handle convert image button
+/**
+ * Handle convert image button click. Fixes parallax effects and vectorizes input image
+ * @param {*} event 
+ */
 function handleFileUpload(event) {
   // prevent default form submission
   event.preventDefault();
@@ -1441,6 +1428,10 @@ function handleFileUpload(event) {
     }
 }
 
+/**
+ * Button click handler to begin cropping workflow. Creates cropper instance around image
+ * @param {*} event 
+ */
 function handleCropImage(event) {
   event.preventDefault();
   // disable all buttons except crop button
@@ -1465,8 +1456,10 @@ function handleCropImage(event) {
 
 }
 
-// Create a toast notification
-function createToastNotification(message) {
+/**
+ * Create a toast notification to handle lack of file upload
+ */
+function createToastNotification() {
   let toast = document.createElement("div");
   toast.textContent = "Please upload a file.";
   toast.className = "toast"; // Assign a class to the toast
@@ -1481,22 +1474,15 @@ function createToastNotification(message) {
   }, 3000);
 }
 
-// function to get and download svg
-// not currently used
-// TODO: update to download svg on download button click
+/**
+ * Handle download button click. Downloads the SVG of the image
+ * @param {*} event 
+ */
 function download_svg(event) {
   event.preventDefault(); 
-  // const svg = getSVG(1);
-  // const blob = new Blob([svg], { type: 'image/svg+xml' });
-  // const url = URL.createObjectURL(blob);
-
-  // const img = document.createElement('img');
-  // img.src = url;
-  
-  // document.body.appendChild(img);
   const outputImage = document.getElementById('outputImage');
   const downloadLink = document.createElement('a');
-  downloadLink.href = outputImage.src
+  downloadLink.href = outputImage.src;
   downloadLink.download = 'your_image.svg';
 
   document.body.appendChild(downloadLink);
@@ -1504,8 +1490,12 @@ function download_svg(event) {
   document.body.removeChild(downloadLink);
 }
 
-let croppedImageDataURL = null;
 
+let croppedImageDataURL = null;
+/**
+ * Finalizes cropping and updates the displayed image
+ * @param {*} event 
+ */
 function cropImage(event) {
     event.preventDefault();
     if (!this.cropper) {
