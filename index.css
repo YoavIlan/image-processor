@@ -60,15 +60,18 @@ body {
 
 #imageArea {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
   margin: auto;
 }
-#imageWrapper {
+
+.image-wrapper {
   width: 50%;
   height: auto;
+  margin: 10px;
 }
-#outputImage {
+
+.image-display {
   width: 100%;
   height: auto;
   aspect-ratio: 8.5 / 11; /* Maintain the aspect ratio */

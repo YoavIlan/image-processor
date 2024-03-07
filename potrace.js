@@ -1443,7 +1443,7 @@ function handleCropImage(event) {
   // check if a cropper instance already exists, ff it exists, destroy the previous instance
   if (this.cropper) cropper.destroy();
   // initialize a new cropper instance on the output image
-  this.cropper = new Cropper(document.getElementById('outputImage'), {
+  this.cropper = new Cropper(document.getElementById('bitmapImage'), {
       aspectRatio: 8.5/11, //NaN for free-form cropping
       viewMode: 1,
       autoCropArea: 1, // automatically crop the area to 100% of the image size
@@ -1503,7 +1503,7 @@ function cropImage(event) {
     }
     const croppedCanvas = this.cropper.getCroppedCanvas(); // Get canvas of cropped image
     croppedImageDataURL = croppedCanvas.toDataURL(); // Store the cropped image data URL
-    document.getElementById('outputImage').src = croppedImageDataURL; // Update displayed image
+    document.getElementById('bitmapImage').src = croppedImageDataURL; // Update displayed image
 
     this.cropper.destroy(); // Cleanup cropper
     this.cropper = null; // Reset cropper variable
@@ -1528,7 +1528,7 @@ fileUpload.addEventListener('change', function(event) {
     if (file) {
         // Create a URL for the file
         const imageUrl = URL.createObjectURL(file);
-        document.getElementById('outputImage').src = imageUrl;
+        document.getElementById('bitmapImage').src = imageUrl;
     }
 });
 
