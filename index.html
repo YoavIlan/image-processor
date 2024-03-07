@@ -15,16 +15,22 @@
 </head>
 
 <body>
+  <!-- create a beautiful landing page that explains that this is an image vectorizer that will take any image and transform it into an SVG format -->
   <div id="header">
     <h1>Image Vectorizer</h1>
     <p>Image vectorizer into SVG complete with parallax effect mitigation</p>
   </div>
   <div id="content">
+    <!-- explain that this was created as a project by students at the university of texas for the Austin School for the Driven -->
     <div id="about">
       <h1>About</h1>
-      <p>This project was created as a project by students at the University of Texas for the Austin School for the Driven.</p>
+      <p>This project was created as a project by students at the University of Texas for the Austin School for the
+        Driven.</p>
+    <!-- Explain that this tool will accept any bitmap image, correct for minor parallax issues, and download an svg output   -->
       <h1>How it works</h1>
-      <p>This tool will accept any bitmap image, correct for minor parallax issues, and download an svg output. Simply upload an image and the tool will do the rest.</p>
+      <p>This tool will accept any bitmap image, correct for minor parallax issues, and download an svg output.
+        Simply upload an image and the tool will do the rest.</p>
+      </p>
     </div>
     <br /><br />
     <hr />
@@ -38,24 +44,58 @@
             <label for="myFile" class="custom-file-upload">Choose Image</label>
             <input type="file" id="myFile" name="image" accept="image/jpeg, image/png, image/jpg, image/bmp" hidden>
             <input type="submit" id="fileSubmit" value="Loading Resources..." disabled>
-            <button id="downloadButton" disabled>Download</button>
-          </div>
-          <div class="slider-container">
-            <div class="slider-labels">
-              <span>Sharp</span>
-              <span>Smooth</span>
-            </div>
-            <input type="range" min="1" max="5000" value="1" class="slider" id="myRange" disabled>
+            <input type="submit" id="downloadButton" value="Download" disabled>
           </div>
         </div>
       </form>
     </div>
     <div id="imageArea">
-      <img id="outputImage" src="" alt="Image will appear here."> 
+      <div id="bitmapWrapper" class="img-edit-wrapper">
+        <div class="image-wrapper">
+          <img id="bitmapImage" class="image-display" src="" alt="Image will appear here."> 
+        </div>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+          <div class="button-container">
+            <input type="submit" id="cropImage" value="Crop" disabled>
+          </div>
+        </form> 
+      </div>
+      
+      <div id="arrow"></div>
+      
+      <div id="vectorWrapper" class="img-edit-wrapper">
+        <div class="image-wrapper">
+          <img id="outputImage" class="image-display" src="" alt="SVG will appear here."> 
+        </div>
+        <div class="slider-container">
+          <div class="slider-labels">
+            <span>Sharp</span>
+            <span>Smooth</span>
+          </div>
+          <input type="range" min="1" max="5000" value="1" class="slider" id="myRange" disabled>
+        </div> 
+      </div>
+
     </div>
     <div id="upload-progress-container" style="display: none; width: 100%; background-color: #f3f3f3; border-radius: 20px;">
-      <div id="upload-progress-bar" style="height: 20px; width: 0%; background-color: #4CAF50; transition: width 0.4s ease-in-out; border-radius: 20px; margin-top: 20px;"></div>
+      <div id="upload-progress-bar" style="height: 20px; width: 0%; background-color: #4CAF50; transition: width 0.4s ease-in-out;
+      border-radius: 20px; margin-top: 20px;"></div>
     </div>   
+    <!-- <div class="image-tuning">
+      <div class="slider-container">
+        <div class="slider-labels">
+          <span>Sharp</span>
+          <span>Smooth</span>
+        </div>
+        <input type="range" min="1" max="5000" value="1" class="slider" id="myRange" disabled>
+      </div>
+      <form action="/upload" method="post" enctype="multipart/form-data">
+        <div class="button-container">
+          <input type="submit" id="cropImage" value="Crop" disabled>
+        </div>
+      </form>
+ 
+    </div> -->
     <br /><br />
     <hr />
   </div>
