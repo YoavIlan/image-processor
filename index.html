@@ -50,19 +50,38 @@
       </form>
     </div>
     <div id="imageArea">
-      <div class="image-wrapper">
-        <img id="bitmapImage" class="image-display" src="" alt="Image will appear here."> 
+      <div id="bitmapWrapper" class="img-edit-wrapper">
+        <div class="image-wrapper">
+          <img id="bitmapImage" class="image-display" src="" alt="Image will appear here."> 
+        </div>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+          <div class="button-container">
+            <input type="submit" id="cropImage" value="Crop" disabled>
+          </div>
+        </form> 
       </div>
+      
       <div id="arrow"></div>
-      <div class="image-wrapper">
-        <img id="outputImage" class="image-display" src="" alt="SVG will appear here."> 
+      
+      <div id="vectorWrapper" class="img-edit-wrapper">
+        <div class="image-wrapper">
+          <img id="outputImage" class="image-display" src="" alt="SVG will appear here."> 
+        </div>
+        <div class="slider-container">
+          <div class="slider-labels">
+            <span>Sharp</span>
+            <span>Smooth</span>
+          </div>
+          <input type="range" min="1" max="5000" value="1" class="slider" id="myRange" disabled>
+        </div> 
       </div>
+
     </div>
     <div id="upload-progress-container" style="display: none; width: 100%; background-color: #f3f3f3; border-radius: 20px;">
       <div id="upload-progress-bar" style="height: 20px; width: 0%; background-color: #4CAF50; transition: width 0.4s ease-in-out;
       border-radius: 20px; margin-top: 20px;"></div>
     </div>   
-    <div class="image-tuning">
+    <!-- <div class="image-tuning">
       <div class="slider-container">
         <div class="slider-labels">
           <span>Sharp</span>
@@ -76,8 +95,7 @@
         </div>
       </form>
  
-    </div>
-    
+    </div> -->
     <br /><br />
     <hr />
   </div>
