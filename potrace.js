@@ -1404,7 +1404,7 @@ function handleFileUpload(event) {
                 // Pass the URL to Potrace LoadImageFromUrl
                 loadImageFromUrl(blobURL);
                 // process(get_and_download_svg)
-
+                document.getElementById('bitmapImage').src = blobURL;
                 process(function() {
                     get_svg();
                     // Enable editing
