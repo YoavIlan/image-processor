@@ -1349,6 +1349,17 @@ function loadOpenCV(onComplete) {
 // global url of jscanified image
 var blobURL = null;
 
+function vectorizeBlob() {
+  loadImageFromUrl(blobURL);
+  // process(get_and_download_svg)
+  document.getElementById('bitmapImage').src = blobURL;
+  process(function() {
+      get_svg();
+      // Enable editing
+      document.getElementById('cropImage').disabled = false;
+      document.getElementById('myRange').disabled = false;
+  }); 
+}
 /**
  * Return the SVG of an image from Potrace
  */
@@ -1401,16 +1412,7 @@ function handleFileUpload(event) {
             resultCanvas.toBlob(function(blob) {
                 // Create a URL for the Blob
                 blobURL = URL.createObjectURL(blob);
-                // Pass the URL to Potrace LoadImageFromUrl
-                loadImageFromUrl(blobURL);
-                // process(get_and_download_svg)
-                document.getElementById('bitmapImage').src = blobURL;
-                process(function() {
-                    get_svg();
-                    // Enable editing
-                    document.getElementById('cropImage').disabled = false;
-                    document.getElementById('myRange').disabled = false;
-                });
+                vectorizeBlob();
             });
         }
 
@@ -1503,8 +1505,8 @@ function cropImage(event) {
     }
     const croppedCanvas = this.cropper.getCroppedCanvas(); // Get canvas of cropped image
     croppedImageDataURL = croppedCanvas.toDataURL(); // Store the cropped image data URL
-    document.getElementById('bitmapImage').src = croppedImageDataURL; // Update displayed image
-
+    blobURL = croppedImageDataURL; // Update displayed image
+    vectorizeBlob();
     this.cropper.destroy(); // Cleanup cropper
     this.cropper = null; // Reset cropper variable
     const cropImageButton = document.getElementById('cropImage');
