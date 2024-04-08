@@ -1349,16 +1349,48 @@ function loadOpenCV(onComplete) {
 // global url of jscanified image
 var blobURL = null;
 
-function vectorizeBlob() {
-  loadImageFromUrl(blobURL);
+function vectorizeBlob(blob) {
+  // run potrace
+  // loadImageFromUrl(blobURL);
   // process(get_and_download_svg)
+  blobURL = URL.createObjectURL(blob);
   document.getElementById('bitmapImage').src = blobURL;
-  process(function() {
-      get_svg();
-      // Enable editing
-      document.getElementById('cropImage').disabled = false;
-      document.getElementById('myRange').disabled = false;
-  }); 
+  // process(function() {
+  //     get_svg();
+  //     // Enable editing
+  //     document.getElementById('cropImage').disabled = false;
+  //     document.getElementById('myRange').disabled = false;
+  // }); 
+  // console.log(JSON.stringify(blobURL))
+  
+  AbortSignal.timeout ??= function timeout(ms) {
+    const ctrl = new AbortController()
+    setTimeout(() => ctrl.abort(), ms)
+    return ctrl.signal
+  }
+  
+  const formData = new FormData();
+  // Add the image to the FormData
+  formData.append('image', blob, 'image.png');
+  fetch('http://at.genesiscreativecollective.org:5050/convert/', {
+    method: 'POST',
+    mode: 'cors',
+    body: formData,
+  })
+    .then(response => response.blob())
+    .then(blob => {
+
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'out.svg';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 }
 /**
  * Return the SVG of an image from Potrace
@@ -1400,34 +1432,33 @@ function handleFileUpload(event) {
       if (progress >= 100) clearInterval(progressInterval);
     }, 100);
 
-        // Create a URL for the image in the file and load into image element
-        const imageUrl = URL.createObjectURL(file);
-        const newImg = document.createElement("img");
-        newImg.src = imageUrl;
-        // once loaded, jscanfiy and load into Potrace
-        newImg.onload = function() {
-            const scanner = new jscanify();
-            // canvas to blob allows for Potrace to process the image
-            const resultCanvas = scanner.extractPaper(newImg, 1159.09090909, 1500);
-            resultCanvas.toBlob(function(blob) {
-                // Create a URL for the Blob
-                blobURL = URL.createObjectURL(blob);
-                vectorizeBlob();
-            });
-        }
-
-        // Hide the progress bar
-        document.getElementById('upload-progress-container').style.display = 'none';
-        // clear the file upload
-        document.getElementById('myFile').value = '';
-
-        // allow download
-        document.getElementById('downloadButton').disabled = false;
-    } 
-    // If no file is uploaded and convert is clicked
-    else {
-        createToastNotification("Please upload a file.");
+    // Create a URL for the image in the file and load into image element
+    const imageUrl = URL.createObjectURL(file);
+    const newImg = document.createElement("img");
+    newImg.src = imageUrl;
+    // once loaded, jscanfiy and load into Potrace
+    newImg.onload = function() {
+        const scanner = new jscanify();
+        // canvas to blob allows for Potrace to process the image
+        const resultCanvas = scanner.extractPaper(newImg, 1159.09090909, 1500);
+        resultCanvas.toBlob(function(blob) {
+            // Create a URL for the Blob
+            vectorizeBlob(blob);
+        });
     }
+
+    // Hide the progress bar
+    document.getElementById('upload-progress-container').style.display = 'none';
+    // clear the file upload
+    document.getElementById('myFile').value = '';
+
+    // allow download
+    document.getElementById('downloadButton').disabled = false;
+  } 
+  // If no file is uploaded and convert is clicked
+  else {
+    createToastNotification("Please upload a file.");
+  }
 }
 
 /**
