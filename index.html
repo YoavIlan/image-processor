@@ -12,6 +12,7 @@
   <meta property="og:locale" content="en_US" />
   <link rel="stylesheet" href="index.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
+  <link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -74,6 +75,9 @@
           </div>
           <input type="range" min="1" max="5000" value="1" class="slider" id="myRange" disabled>
         </div> 
+        <div>
+          <input type="checkbox" id="toggleSwitch" checked data-toggle="toggle" data-on="Hairline Mode" data-off="Normal Mode" data-onstyle="success" data-offstyle="danger">
+        </div>
       </div>
 
     </div>
@@ -103,6 +107,36 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="potrace.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+  <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var toggleSwitch = document.getElementById("toggleSwitch");
+      var convertButton = document.getElementById("fileSubmit");
+
+      convertButton.addEventListener("click", function() {
+        if (toggleSwitch.checked) {
+          // Call function when the toggle switch is on
+          functionWhenToggleIsOn();
+        } else {
+          // Call function when the toggle switch is off
+          functionWhenToggleIsOff();
+        }
+      });
+
+      // Define the functions to call
+      function functionWhenToggleIsOn() {
+        console.log("Function called when toggle is on");
+        // Add your logic here
+      }
+
+      function functionWhenToggleIsOff() {
+        console.log("Function called when toggle is off");
+        // Add your logic here
+      }
+    });
+  </script>
+
 </body>
 
 </html>
