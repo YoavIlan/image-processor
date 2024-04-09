@@ -12,7 +12,8 @@
   <meta property="og:locale" content="en_US" />
   <link rel="stylesheet" href="index.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
-  <link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -76,8 +77,16 @@
           <input type="range" min="1" max="5000" value="1" class="slider" id="myRange" disabled>
         </div> 
         <div>
-          <input type="checkbox" id="toggleSwitch" checked data-toggle="toggle" data-on="Hairline Mode" data-off="Normal Mode" data-onstyle="success" data-offstyle="danger">
+          <div class="hairline-mode-container">
+            <label class="label-class"for="toggleSwitch">Hairline Mode</label>
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="toggleSwitch">
+              <label class="custom-control-label" for="toggleSwitch"></label>
+            </div>
+          </div>
+          
         </div>
+        
       </div>
 
     </div>
@@ -124,15 +133,15 @@
         }
       });
 
-      // Define the functions to call
+      
       function functionWhenToggleIsOn() {
         console.log("Function called when toggle is on");
-        // Add your logic here
+        
       }
 
       function functionWhenToggleIsOff() {
         console.log("Function called when toggle is off");
-        // Add your logic here
+        
       }
     });
   </script>
