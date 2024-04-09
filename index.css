@@ -29,7 +29,6 @@ code {
 
 html,
 body {
-  margin: 0;
   font-family: 'CustomFont';
   src: url('https://img1.wsimg.com/gfonts/s/raleway/v29/1Ptug8zYS_SKggPNyC0IT4ttDfA.woff2') format('woff2');
 }
@@ -312,7 +311,6 @@ code {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    height: 100%;
   }
   .sidebar a {
     display: block;
@@ -326,8 +324,3 @@ code {
     width: 80%;
   }
   }
-  
-
-
-
-
