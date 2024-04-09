@@ -1,9 +1,37 @@
-@import url("https://fonts.googleapis.com/css?family=Lato:100,200,300,400,500,600,700,800,900");
+@font-face {
+  font-family: 'CustomFont';
+  src: url('https://img1.wsimg.com/gfonts/s/raleway/v29/1Ptug8zYS_SKggPNyC0IT4ttDfA.woff2') format('woff2');
+}
+
+html,
+body,
+#header,
+.view-on .view-on-option,
+#content,
+.toast,
+.image-wrapper
+.img-edit-wrapper
+.image-display,
+.button-container,
+#uploadSuccess,
+.slider,
+.slider-container,
+.slider-labels,
+#demo #demo-images .image-container,
+#demo #demo-images .image-container.selected,
+#demo #demo-images .image-container img,
+#demo-result,
+code {
+  font-family: "CustomFont";
+}
+
+@import url("https://img1.wsimg.com/gfonts/s/raleway/v29/1Ptug8zYS_SKggPNyC0IT4ttDfA.woff2");
 
 html,
 body {
   margin: 0;
-  font-family: "Lato";
+  font-family: 'CustomFont';
+  src: url('https://img1.wsimg.com/gfonts/s/raleway/v29/1Ptug8zYS_SKggPNyC0IT4ttDfA.woff2') format('woff2');
 }
 
 #header {
@@ -23,7 +51,7 @@ body {
   background: white;
   color: black;
   text-decoration: none;
-  font-family: "Lato";
+  font-family: 'CustomFont';
   font-size: 16px;
   display: inline-flex;
   align-items: center;
@@ -41,6 +69,12 @@ body {
   padding-bottom: 30px;
 }
 
+.content-container {
+  display: flex;
+  height: 100%; /* Set height to 100% */
+  
+}
+
 .toast {
   position: fixed;
   bottom: -50px; /* Start position off screen */
@@ -53,7 +87,7 @@ body {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   z-index: 1000;
-  font-family: 'Arial', sans-serif;
+  font-family: 'CustomFont';
   font-size: 18px;
   transition: bottom 0.2s ease-out; /* Add transition */
 } 
@@ -101,7 +135,7 @@ body {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
-  background-color: #1e85ff;
+  background-color: #1e85ff; /* change color to eb6c05 here if he wants something different*/
   color: white;
   cursor: pointer;
   text-align: center;
@@ -109,6 +143,7 @@ body {
   width: 200px; /* Set a specific width */
   height: 50px; /* Set a specific height */
   line-height: 20px; /* Adjust line height */
+  font-family: 'CustomFont'; /* Set font */
   font-size: 16px; /* Set a specific font size */
   box-sizing: border-box; /* Include padding and border in element's total width and height */
   margin-left: auto; /* Center the buttons */
@@ -193,7 +228,7 @@ body {
 }
 
 #demo #demo-images .image-container.selected {
-  box-shadow: 0 0 0 6px #1e85ff;
+  box-shadow: 0 0 0 6px #1e85ff; /* change to eb6c05 if he wants orange */
 }
 
 #demo #demo-images .image-container img {
@@ -269,5 +304,30 @@ code {
   #arrow::before{
     content: "\2193";
   }
+  /* The sidenav */
+  .sidebar {
+    width: 200px;
+    background-color: #f3f3f3;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .sidebar a {
+    display: block;
+  }
+  #main {
+    flex: 1;
+    padding: 20px;
+  }
+  .section {
+    margin-bottom: 20px;
+    width: 80%;
+  }
+  }
+  
 
-}
+
+
+
