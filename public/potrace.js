@@ -1,4 +1,6 @@
-/* Copyright (C) 2001-2013 Peter Selinger.
+/* This script uses Peter Selinger's Potrace javascript port to convert an image to SVG. Potrace code is directly used in this file.
+ * Thank you Peter Selinger for the Potrace code. 
+ * Copyright (C) 2001-2013 Peter Selinger.
  *
  * A javascript port of Potrace (http://potrace.sourceforge.net).
  * 
@@ -1310,6 +1312,18 @@ const { loadImageFromUrl, process, getSVG, setParameter } = Potrace;
 let loadedOpenCV = false;
 let cropper;
 
+// jscanify object
+const scanner = new jscanify()
+
+// global url of jscanified image
+var blobURL = null;
+
+// global blob for potrace
+var potraceBlob = null;
+
+// global blob for autotrace
+var autotraceBlob = null;
+
 // openCV URL
 const openCvURL = "https://docs.opencv.org/4.7.0/opencv.js"
 
@@ -1346,34 +1360,80 @@ function loadOpenCV(onComplete) {
     }
 }
 
-// global url of jscanified image
-var blobURL = null;
-
-function vectorizeBlob() {
-  loadImageFromUrl(blobURL);
-  // process(get_and_download_svg)
-  document.getElementById('bitmapImage').src = blobURL;
-  process(function() {
-      get_svg();
-      // Enable editing
-      document.getElementById('cropImage').disabled = false;
-      document.getElementById('myRange').disabled = false;
-  }); 
-}
 /**
- * Return the SVG of an image from Potrace
+ * handle vectorization logic between autotrace/potrace
+ * @param {*} blob 
  */
-function get_svg() {
-  const svg = getSVG(1);
-  const blob = new Blob([svg], { type: 'image/svg+xml' });
-  const url = URL.createObjectURL(blob);
+async function vectorizeBlob(blob) {
+  blobURL = URL.createObjectURL(blob);
+  document.getElementById('bitmapImage').src = blobURL;
+
+  // Wait for both vectorizeTrace and vectorizeHairline to complete
+  await Promise.all([vectorizeTrace(), vectorizeHairline(blob)]);
+  displaySVG();
+  
+  // Enable editing
+  document.getElementById('cropImage').disabled = false;
+  if (!hairlineToggle.checked) 
+    document.getElementById('myRange').disabled = false;
+}
+
+/**
+ * Vectorize the image using autotrace on the server side 
+ */
+function vectorizeHairline(blob) {
+  return new Promise((resolve, reject) => {
+    const formData = new FormData();
+    // Add the image to the FormData
+    formData.append('image', blob, 'image.png');
+    fetch('http://at.genesiscreativecollective.org:5050/convert/', {
+      method: 'POST',
+      mode: 'cors',
+      body: formData,
+    })
+      .then(response => response.text())
+      .then(svgTxt => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(svgTxt, 'image/svg+xml');
+        const svgElement = doc.documentElement;
+        svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        serialized = new XMLSerializer().serializeToString(svgElement);
+        serialized = serialized.replace(/xmlns=""/g, '');
+        autotraceBlob = new Blob([serialized], { type: 'image/svg+xml' });
+        resolve();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        reject();
+      });
+  });
+}
+
+/**
+ * Vectorize the image using Potrace
+ */
+function vectorizeTrace() {
+  return new Promise((resolve, reject) => { 
+    loadImageFromUrl(blobURL);
+    process( () => {
+      const svg = getSVG(1);
+      potraceBlob = new Blob([svg], { type: 'image/svg+xml' });
+      resolve();
+    });
+  });
+}
+
+/**
+ * Display the SVG from autotrace/potrace on the page
+ */
+function displaySVG() {
+  // if hairline is enabled, vectorize using autotrace. Else potrace. Defaults to autotrace.
+  const isHairline = hairlineToggle.checked;
+  const vectorBlob = isHairline ? autotraceBlob : potraceBlob;
+  const url = URL.createObjectURL(vectorBlob);
 
   document.getElementById('outputImage').src = url;
-  document.getElementById('myRange').disabled = false;
 }
-
-// jscanify object
-const scanner = new jscanify()
 
 /**
  * Handle convert image button click. Fixes parallax effects and vectorizes input image
@@ -1385,49 +1445,31 @@ function handleFileUpload(event) {
   // get uploaded file
   const file = document.getElementById('myFile').files[0];
   if(file) {
-    // Show the progress bar and initialize progress to 0
-    const progressBar = document.getElementById('upload-progress-bar');
-    progressBar.style.width = '0%';
-    document.getElementById('upload-progress-container').style.display = 'block';
 
-    // Simulate progress
-    let progress = 0;
-    const progressInterval = setInterval(() => {
-      progress += 20;
-      progressBar.style.width = `${progress}%`;
-
-      // Clear interval if progress is 100%
-      if (progress >= 100) clearInterval(progressInterval);
-    }, 100);
-
-        // Create a URL for the image in the file and load into image element
-        const imageUrl = URL.createObjectURL(file);
-        const newImg = document.createElement("img");
-        newImg.src = imageUrl;
-        // once loaded, jscanfiy and load into Potrace
-        newImg.onload = function() {
-            const scanner = new jscanify();
-            // canvas to blob allows for Potrace to process the image
-            const resultCanvas = scanner.extractPaper(newImg, 1159.09090909, 1500);
-            resultCanvas.toBlob(function(blob) {
-                // Create a URL for the Blob
-                blobURL = URL.createObjectURL(blob);
-                vectorizeBlob();
-            });
-        }
-
-        // Hide the progress bar
-        document.getElementById('upload-progress-container').style.display = 'none';
-        // clear the file upload
-        document.getElementById('myFile').value = '';
-
-        // allow download
-        document.getElementById('downloadButton').disabled = false;
-    } 
-    // If no file is uploaded and convert is clicked
-    else {
-        createToastNotification("Please upload a file.");
+    // Create a URL for the image in the file and load into image element
+    const imageUrl = URL.createObjectURL(file);
+    const newImg = document.createElement("img");
+    newImg.src = imageUrl;
+    // once loaded, jscanfiy and load into Potrace
+    newImg.onload = function() {
+        const scanner = new jscanify();
+        // canvas to blob allows for autotrace/Potrace to process the image
+        const resultCanvas = scanner.extractPaper(newImg, 1159.09090909, 1500);
+        resultCanvas.toBlob(function(blob) {
+          // vectorize the jscanified image  
+          vectorizeBlob(blob);
+        });
     }
+
+    // clear the file upload
+    document.getElementById('myFile').value = '';
+    // allow download
+    document.getElementById('downloadButton').disabled = false;
+  } 
+  // If no file is uploaded and convert is clicked
+  else {
+    createToastNotification("Please upload a file.");
+  }
 }
 
 /**
@@ -1441,6 +1483,7 @@ function handleCropImage(event) {
   document.getElementById('downloadButton').disabled = true;
   document.getElementById('myRange').disabled = true;
   document.getElementById('myFile').disabled = true;
+  hairlineToggle.disabled = true;
 
   // check if a cropper instance already exists, ff it exists, destroy the previous instance
   if (this.cropper) cropper.destroy();
@@ -1480,7 +1523,7 @@ function createToastNotification() {
  * Handle download button click. Downloads the SVG of the image
  * @param {*} event 
  */
-function download_svg(event) {
+function downloadSVG(event) {
   event.preventDefault(); 
   const outputImage = document.getElementById('outputImage');
   const downloadLink = document.createElement('a');
@@ -1504,9 +1547,9 @@ function cropImage(event) {
         return;
     }
     const croppedCanvas = this.cropper.getCroppedCanvas(); // Get canvas of cropped image
-    croppedImageDataURL = croppedCanvas.toDataURL(); // Store the cropped image data URL
-    blobURL = croppedImageDataURL; // Update displayed image
-    vectorizeBlob();
+    croppedCanvas.toBlob(function(blob) {
+      vectorizeBlob(blob);
+    });
     this.cropper.destroy(); // Cleanup cropper
     this.cropper = null; // Reset cropper variable
     const cropImageButton = document.getElementById('cropImage');
@@ -1518,6 +1561,7 @@ function cropImage(event) {
     document.getElementById('downloadButton').disabled = false;
     document.getElementById('myRange').disabled = false;
     document.getElementById('myFile').disabled = false;
+    hairlineToggle.disabled = false;
 
 }
 
@@ -1542,10 +1586,13 @@ fileInput.addEventListener("click", handleFileUpload);
 const slider = document.getElementById('myRange');
 slider.addEventListener('change', function() {
   const value = slider.value / 1000;
-  console.log(value);
   setParameter({alphamax: value});
   loadImageFromUrl(blobURL);
-  process(get_svg);
+  process( () => {
+    const svg = getSVG(1);
+    potraceBlob = new Blob([svg], { type: 'image/svg+xml' });
+    displaySVG();
+  });
 });
 
 // Cropper event listener
@@ -1554,4 +1601,12 @@ cropButton.addEventListener('click', handleCropImage);
 
 // Download button event listener
 const downloadButton = document.getElementById('downloadButton');
-downloadButton.addEventListener('click', download_svg);
+downloadButton.addEventListener('click', downloadSVG);
+
+// Hairline toggle switch event listener
+const hairlineToggle = document.getElementById("toggleSwitch");
+hairlineToggle.addEventListener("change", () => {
+  displaySVG();
+  slider.disabled = hairlineToggle.checked;
+  slider.value = 0;
+});
