@@ -1367,14 +1367,9 @@ function loadOpenCV(onComplete) {
 function vectorizeBlob(blob) {
   blobURL = URL.createObjectURL(blob);
   document.getElementById('bitmapImage').src = blobURL;
-  // if hairline is enabled, vectorize using autotrace. Else potrace. Defaults to autotrace.
-  const isHairline = hairlineToggle.checked;
+
   potraceBlob = vectorizeTrace();
   autotraceBlob = vectorizeHairline(blob);
-  if (isHairline)
-    displaySVG(autotraceBlob);
-  else
-    displaySVG(potraceBlob);
   
   // Enable editing
   document.getElementById('cropImage').disabled = false;
@@ -1419,7 +1414,10 @@ function vectorizeTrace() {
 /**
  * Display the SVG from autotrace/potrace on the page
  */
-function displaySVG(vectorBlob) {
+function displaySVG() {
+  // if hairline is enabled, vectorize using autotrace. Else potrace. Defaults to autotrace.
+  const isHairline = hairlineToggle.checked;
+  const vectorBlob = isHairline ? autotraceBlob : potraceBlob;
   const url = URL.createObjectURL(vectorBlob);
 
   document.getElementById('outputImage').src = url;
