@@ -1312,6 +1312,12 @@ const { loadImageFromUrl, process, getSVG, setParameter } = Potrace;
 let loadedOpenCV = false;
 let cropper;
 
+// jscanify object
+const scanner = new jscanify()
+
+// global url of jscanified image
+var blobURL = null;
+
 // openCV URL
 const openCvURL = "https://docs.opencv.org/4.7.0/opencv.js"
 
@@ -1347,9 +1353,6 @@ function loadOpenCV(onComplete) {
         document.body.appendChild(script)
     }
 }
-
-// global url of jscanified image
-var blobURL = null;
 
 function vectorizeBlob(blob) {
   // run potrace
@@ -1405,9 +1408,6 @@ function get_svg() {
   document.getElementById('outputImage').src = url;
   document.getElementById('myRange').disabled = false;
 }
-
-// jscanify object
-const scanner = new jscanify()
 
 /**
  * Handle convert image button click. Fixes parallax effects and vectorizes input image
