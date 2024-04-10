@@ -1318,6 +1318,12 @@ const scanner = new jscanify()
 // global url of jscanified image
 var blobURL = null;
 
+// global blob for potrace
+var potraceBlob = null;
+
+// global blob for autotrace
+var autotraceBlob = null;
+
 // openCV URL
 const openCvURL = "https://docs.opencv.org/4.7.0/opencv.js"
 
@@ -1354,26 +1360,31 @@ function loadOpenCV(onComplete) {
     }
 }
 
+/**
+ * handle vectorization logic between autotrace/potrace
+ * @param {*} blob 
+ */
 function vectorizeBlob(blob) {
-  // run potrace
-  // loadImageFromUrl(blobURL);
-  // process(get_and_download_svg)
   blobURL = URL.createObjectURL(blob);
   document.getElementById('bitmapImage').src = blobURL;
-  // process(function() {
-  //     get_svg();
-  //     // Enable editing
-  //     document.getElementById('cropImage').disabled = false;
-  //     document.getElementById('myRange').disabled = false;
-  // }); 
-  // console.log(JSON.stringify(blobURL))
+  // if hairline is enabled, vectorize using autotrace. Else potrace. Defaults to autotrace.
+  const isHairline = hairlineToggle.checked;
+  potraceBlob = vectorizeTrace();
+  autotraceBlob = vectorizeHairline(blob);
+  if (isHairline)
+    displaySVG(autotraceBlob);
+  else
+    displaySVG(potraceBlob);
   
-  AbortSignal.timeout ??= function timeout(ms) {
-    const ctrl = new AbortController()
-    setTimeout(() => ctrl.abort(), ms)
-    return ctrl.signal
-  }
-  
+  // Enable editing
+  document.getElementById('cropImage').disabled = false;
+  document.getElementById('myRange').disabled = false;
+}
+
+/**
+ * Vectorize the image using autotrace on the server side 
+ */
+function vectorizeHairline(blob) {
   const formData = new FormData();
   // Add the image to the FormData
   formData.append('image', blob, 'image.png');
@@ -1384,26 +1395,32 @@ function vectorizeBlob(blob) {
   })
     .then(response => response.blob())
     .then(blob => {
-
-      const url = window.URL.createObjectURL(new Blob([blob]));
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'out.svg';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+      const vectorBlob = new Blob([blob], { type: 'image/svg+xml' });
+      return vectorBlob;
     })
     .catch(error => {
       console.error('Error:', error);
+      return null;
     });
 }
+
 /**
- * Return the SVG of an image from Potrace
+ * Vectorize the image using Potrace
  */
-function get_svg() {
-  const svg = getSVG(1);
-  const blob = new Blob([svg], { type: 'image/svg+xml' });
-  const url = URL.createObjectURL(blob);
+function vectorizeTrace() {
+  loadImageFromUrl(blobURL);
+  process( () => {
+    const svg = getSVG(1);
+    const vectorBlob = new Blob([svg], { type: 'image/svg+xml' });
+    return vectorBlob;
+  });
+}
+
+/**
+ * Display the SVG from autotrace/potrace on the page
+ */
+function displaySVG(vectorBlob) {
+  const url = URL.createObjectURL(vectorBlob);
 
   document.getElementById('outputImage').src = url;
   document.getElementById('myRange').disabled = false;
@@ -1427,17 +1444,16 @@ function handleFileUpload(event) {
     // once loaded, jscanfiy and load into Potrace
     newImg.onload = function() {
         const scanner = new jscanify();
-        // canvas to blob allows for Potrace to process the image
+        // canvas to blob allows for autotrace/Potrace to process the image
         const resultCanvas = scanner.extractPaper(newImg, 1159.09090909, 1500);
         resultCanvas.toBlob(function(blob) {
-            // Create a URL for the Blob
-            vectorizeBlob(blob);
+          // vectorize the jscanified image  
+          vectorizeBlob(blob);
         });
     }
 
     // clear the file upload
     document.getElementById('myFile').value = '';
-
     // allow download
     document.getElementById('downloadButton').disabled = false;
   } 
@@ -1521,9 +1537,9 @@ function cropImage(event) {
         return;
     }
     const croppedCanvas = this.cropper.getCroppedCanvas(); // Get canvas of cropped image
-    croppedImageDataURL = croppedCanvas.toDataURL(); // Store the cropped image data URL
-    blobURL = croppedImageDataURL; // Update displayed image
-    vectorizeBlob();
+    croppedCanvas.toBlob(function(blob) {
+      vectorizeBlob(blob);
+    });
     this.cropper.destroy(); // Cleanup cropper
     this.cropper = null; // Reset cropper variable
     const cropImageButton = document.getElementById('cropImage');
@@ -1573,30 +1589,10 @@ cropButton.addEventListener('click', handleCropImage);
 const downloadButton = document.getElementById('downloadButton');
 downloadButton.addEventListener('click', download_svg);
 
-
-
-    document.addEventListener("DOMContentLoaded", function() {
-      var toggleSwitch = document.getElementById("toggleSwitch");
-      var convertButton = document.getElementById("fileSubmit");
-
-      convertButton.addEventListener("click", function() {
-        if (toggleSwitch.checked) {
-          // Call function when the toggle switch is on
-          functionWhenToggleIsOn();
-        } else {
-          // Call function when the toggle switch is off
-          functionWhenToggleIsOff();
-        }
-      });
-
-      
-      function functionWhenToggleIsOn() {
-        console.log("Function called when toggle is on");
-        
-      }
-
-      function functionWhenToggleIsOff() {
-        console.log("Function called when toggle is off");
-        
-      }
-    });
+const hairlineToggle = document.getElementById("toggleSwitch");
+hairlineToggle.addEventListener("change", function() {
+  const isChecked = hairlineToggle.checked;
+  // setParameter({optcurve: value});
+  // loadImageFromUrl(blobURL);
+  // process(get_svg);
+});
