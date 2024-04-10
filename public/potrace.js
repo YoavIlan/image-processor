@@ -1,4 +1,6 @@
-/* Copyright (C) 2001-2013 Peter Selinger.
+/* This script uses Peter Selinger's Potrace javascript port to convert an image to SVG. Potrace code is directly used in this file.
+ * Thank you Peter Selinger for the Potrace code. 
+ * Copyright (C) 2001-2013 Peter Selinger.
  *
  * A javascript port of Potrace (http://potrace.sourceforge.net).
  * 
@@ -1417,20 +1419,6 @@ function handleFileUpload(event) {
   // get uploaded file
   const file = document.getElementById('myFile').files[0];
   if(file) {
-    // Show the progress bar and initialize progress to 0
-    const progressBar = document.getElementById('upload-progress-bar');
-    progressBar.style.width = '0%';
-    document.getElementById('upload-progress-container').style.display = 'block';
-
-    // Simulate progress
-    let progress = 0;
-    const progressInterval = setInterval(() => {
-      progress += 20;
-      progressBar.style.width = `${progress}%`;
-
-      // Clear interval if progress is 100%
-      if (progress >= 100) clearInterval(progressInterval);
-    }, 100);
 
     // Create a URL for the image in the file and load into image element
     const imageUrl = URL.createObjectURL(file);
@@ -1447,8 +1435,6 @@ function handleFileUpload(event) {
         });
     }
 
-    // Hide the progress bar
-    document.getElementById('upload-progress-container').style.display = 'none';
     // clear the file upload
     document.getElementById('myFile').value = '';
 
