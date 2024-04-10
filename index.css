@@ -270,6 +270,18 @@ code {
   background-color: #f1f1f1 !important;
   border-radius: 5px;
 }
+/* Add hover effect for sidebar links */
+.sidebar a {
+  display: block;
+  color: black; /* Set default color */
+  text-decoration: none; /* Remove underline */
+  /* font-weight: bold; Make the font bold - not sure if we want it bold all the time */
+}
+
+.sidebar a:hover {
+  color:#eb6c05; /* Change color on hover */
+}
+
 
 /* content: 2193 when screen smol */
 
@@ -311,10 +323,19 @@ code {
     padding: 20px;
     display: flex;
     flex-direction: column;
+    height: 100%;
   }
   .sidebar a {
     display: block;
+    color: black; /* Set default color */
+    text-decoration: none; /* Remove underline */
+    /* font-weight: bold; Make the font bold - not sure if we want it bold all the time */
   }
+  
+  .sidebar a:hover {
+    color:#eb6c05; /* Change color on hover */
+  }
+  
   #main {
     flex: 1;
     padding: 20px;
