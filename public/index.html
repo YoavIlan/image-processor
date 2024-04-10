@@ -94,21 +94,6 @@
       <div id="upload-progress-bar" style="height: 20px; width: 0%; background-color: #4CAF50; transition: width 0.4s ease-in-out;
       border-radius: 20px; margin-top: 20px;"></div>
     </div>   
-    <!-- <div class="image-tuning">
-      <div class="slider-container">
-        <div class="slider-labels">
-          <span>Sharp</span>
-          <span>Smooth</span>
-        </div>
-        <input type="range" min="1" max="5000" value="1" class="slider" id="myRange" disabled>
-      </div>
-      <form action="/upload" method="post" enctype="multipart/form-data">
-        <div class="button-container">
-          <input type="submit" id="cropImage" value="Crop" disabled>
-        </div>
-      </form>
- 
-    </div> -->
     <br /><br />
     <hr />
   </div>
@@ -117,34 +102,6 @@
   <script src="potrace.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
   <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      var toggleSwitch = document.getElementById("toggleSwitch");
-      var convertButton = document.getElementById("fileSubmit");
-
-      convertButton.addEventListener("click", function() {
-        if (toggleSwitch.checked) {
-          // Call function when the toggle switch is on
-          functionWhenToggleIsOn();
-        } else {
-          // Call function when the toggle switch is off
-          functionWhenToggleIsOff();
-        }
-      });
-
-      
-      function functionWhenToggleIsOn() {
-        console.log("Function called when toggle is on");
-        
-      }
-
-      function functionWhenToggleIsOff() {
-        console.log("Function called when toggle is off");
-        
-      }
-    });
-  </script>
 
 </body>
 

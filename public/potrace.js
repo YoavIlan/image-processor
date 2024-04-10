@@ -1586,3 +1586,31 @@ cropButton.addEventListener('click', handleCropImage);
 // Download button event listener
 const downloadButton = document.getElementById('downloadButton');
 downloadButton.addEventListener('click', download_svg);
+
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+      var toggleSwitch = document.getElementById("toggleSwitch");
+      var convertButton = document.getElementById("fileSubmit");
+
+      convertButton.addEventListener("click", function() {
+        if (toggleSwitch.checked) {
+          // Call function when the toggle switch is on
+          functionWhenToggleIsOn();
+        } else {
+          // Call function when the toggle switch is off
+          functionWhenToggleIsOff();
+        }
+      });
+
+      
+      function functionWhenToggleIsOn() {
+        console.log("Function called when toggle is on");
+        
+      }
+
+      function functionWhenToggleIsOff() {
+        console.log("Function called when toggle is off");
+        
+      }
+    });
