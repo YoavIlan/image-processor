@@ -1511,7 +1511,7 @@ function createToastNotification() {
  * Handle download button click. Downloads the SVG of the image
  * @param {*} event 
  */
-function download_svg(event) {
+function downloadSVG(event) {
   event.preventDefault(); 
   const outputImage = document.getElementById('outputImage');
   const downloadLink = document.createElement('a');
@@ -1585,12 +1585,8 @@ cropButton.addEventListener('click', handleCropImage);
 
 // Download button event listener
 const downloadButton = document.getElementById('downloadButton');
-downloadButton.addEventListener('click', download_svg);
+downloadButton.addEventListener('click', downloadSVG);
 
+// Hairline toggle switch event listener
 const hairlineToggle = document.getElementById("toggleSwitch");
-hairlineToggle.addEventListener("change", function() {
-  const isChecked = hairlineToggle.checked;
-  // setParameter({optcurve: value});
-  // loadImageFromUrl(blobURL);
-  // process(get_svg);
-});
+hairlineToggle.addEventListener("change", () => displaySVG());
