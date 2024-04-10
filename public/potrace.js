@@ -1364,12 +1364,13 @@ function loadOpenCV(onComplete) {
  * handle vectorization logic between autotrace/potrace
  * @param {*} blob 
  */
-function vectorizeBlob(blob) {
+async function vectorizeBlob(blob) {
   blobURL = URL.createObjectURL(blob);
   document.getElementById('bitmapImage').src = blobURL;
 
-  potraceBlob = vectorizeTrace();
-  autotraceBlob = vectorizeHairline(blob);
+  // Wait for both vectorizeTrace and vectorizeHairline to complete
+  await Promise.all([vectorizeTrace(), vectorizeHairline(blob)]);
+  displaySVG();
   
   // Enable editing
   document.getElementById('cropImage').disabled = false;
@@ -1380,34 +1381,44 @@ function vectorizeBlob(blob) {
  * Vectorize the image using autotrace on the server side 
  */
 function vectorizeHairline(blob) {
-  const formData = new FormData();
-  // Add the image to the FormData
-  formData.append('image', blob, 'image.png');
-  fetch('http://at.genesiscreativecollective.org:5050/convert/', {
-    method: 'POST',
-    mode: 'cors',
-    body: formData,
-  })
-    .then(response => response.blob())
-    .then(blob => {
-      const vectorBlob = new Blob([blob], { type: 'image/svg+xml' });
-      return vectorBlob;
+  return new Promise((resolve, reject) => {
+    const formData = new FormData();
+    // Add the image to the FormData
+    formData.append('image', blob, 'image.png');
+    fetch('http://at.genesiscreativecollective.org:5050/convert/', {
+      method: 'POST',
+      mode: 'cors',
+      body: formData,
     })
-    .catch(error => {
-      console.error('Error:', error);
-      return null;
-    });
+      .then(response => response.text())
+      .then(svgTxt => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(svgTxt, 'image/svg+xml');
+        const svgElement = doc.documentElement;
+        svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        serialized = new XMLSerializer().serializeToString(svgElement);
+        serialized = serialized.replace(/xmlns=""/g, '');
+        autotraceBlob = new Blob([serialized], { type: 'image/svg+xml' });
+        resolve();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        reject();
+      });
+  });
 }
 
 /**
  * Vectorize the image using Potrace
  */
 function vectorizeTrace() {
-  loadImageFromUrl(blobURL);
-  process( () => {
-    const svg = getSVG(1);
-    const vectorBlob = new Blob([svg], { type: 'image/svg+xml' });
-    return vectorBlob;
+  return new Promise((resolve, reject) => { 
+    loadImageFromUrl(blobURL);
+    process( () => {
+      const svg = getSVG(1);
+      potraceBlob = new Blob([svg], { type: 'image/svg+xml' });
+      resolve();
+    });
   });
 }
 
@@ -1573,7 +1584,6 @@ fileInput.addEventListener("click", handleFileUpload);
 const slider = document.getElementById('myRange');
 slider.addEventListener('change', function() {
   const value = slider.value / 1000;
-  console.log(value);
   setParameter({alphamax: value});
   loadImageFromUrl(blobURL);
   process(get_svg);
