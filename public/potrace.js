@@ -1374,7 +1374,8 @@ async function vectorizeBlob(blob) {
   
   // Enable editing
   document.getElementById('cropImage').disabled = false;
-  document.getElementById('myRange').disabled = false;
+  if (!hairlineToggle.checked) 
+    document.getElementById('myRange').disabled = false;
 }
 
 /**
@@ -1432,7 +1433,6 @@ function displaySVG() {
   const url = URL.createObjectURL(vectorBlob);
 
   document.getElementById('outputImage').src = url;
-  document.getElementById('myRange').disabled = false;
 }
 
 /**
@@ -1483,6 +1483,7 @@ function handleCropImage(event) {
   document.getElementById('downloadButton').disabled = true;
   document.getElementById('myRange').disabled = true;
   document.getElementById('myFile').disabled = true;
+  hairlineToggle.disabled = true;
 
   // check if a cropper instance already exists, ff it exists, destroy the previous instance
   if (this.cropper) cropper.destroy();
@@ -1560,6 +1561,7 @@ function cropImage(event) {
     document.getElementById('downloadButton').disabled = false;
     document.getElementById('myRange').disabled = false;
     document.getElementById('myFile').disabled = false;
+    hairlineToggle.disabled = false;
 
 }
 
@@ -1586,7 +1588,11 @@ slider.addEventListener('change', function() {
   const value = slider.value / 1000;
   setParameter({alphamax: value});
   loadImageFromUrl(blobURL);
-  process(get_svg);
+  process( () => {
+    const svg = getSVG(1);
+    potraceBlob = new Blob([svg], { type: 'image/svg+xml' });
+    displaySVG();
+  });
 });
 
 // Cropper event listener
@@ -1599,4 +1605,8 @@ downloadButton.addEventListener('click', downloadSVG);
 
 // Hairline toggle switch event listener
 const hairlineToggle = document.getElementById("toggleSwitch");
-hairlineToggle.addEventListener("change", () => displaySVG());
+hairlineToggle.addEventListener("change", () => {
+  displaySVG();
+  slider.disabled = hairlineToggle.checked;
+  slider.value = 0;
+});
