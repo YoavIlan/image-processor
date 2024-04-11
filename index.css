@@ -28,13 +28,20 @@ code {
 @import url("https://img1.wsimg.com/gfonts/s/raleway/v29/1Ptug8zYS_SKggPNyC0IT4ttDfA.woff2");
 
 html,
-body {
+/* body {
   font-family: 'CustomFont';
   src: url('https://img1.wsimg.com/gfonts/s/raleway/v29/1Ptug8zYS_SKggPNyC0IT4ttDfA.woff2') format('woff2');
+} */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
 }
-
 #header {
-  background: #1e85ff;
+  background-color: #007bff; /* Change to blue color */
+  text-align: center;
+  margin-left: 245px; 
   color: white;
   padding: 20px 0;
   text-align: center;
@@ -43,6 +50,7 @@ body {
   letter-spacing: 1px;
   text-transform: uppercase;
 }
+
 
 .view-on .view-on-option {
   padding: 11px 16px;
@@ -59,18 +67,24 @@ body {
 .view-on .view-on-option svg {
   margin-right: 8px;
 }
-
+/* 
 #content {
   max-width: 900px;
   margin: auto;
   margin-top: 30px;
   padding: 0 30px;
   padding-bottom: 30px;
+} */
+#content {
+  display: flex;
+  flex: 1;
+  margin-left: 385px; 
 }
 
 .content-container {
   display: flex;
   height: 100%; /* Set height to 100% */
+  
   
 }
 
@@ -270,16 +284,45 @@ code {
   background-color: #f1f1f1 !important;
   border-radius: 5px;
 }
+/* Side Bar */
 /* Add hover effect for sidebar links */
 .sidebar a {
   display: block;
-  color: black; /* Set default color */
+  color: #808080; /*rgb(79, 70, 70); /* Set default color */ 
   text-decoration: none; /* Remove underline */
   /* font-weight: bold; Make the font bold - not sure if we want it bold all the time */
+  
+  font-size: 18.5px;
+  /* font-weight: bold; */
 }
 
 .sidebar a:hover {
   color:#eb6c05; /* Change color on hover */
+}
+
+.sidebar {
+  width: 220px;
+  background-color: white;
+  color: white;
+  padding: 50px;
+  display: flex;
+  justify-content: center; 
+  align-items: left; 
+  gap: 25px;
+  position: fixed;
+  height: 100%;
+  flex-direction: column;
+}
+
+
+
+#main {
+  flex: 1;
+  padding: 20px;
+}
+.section {
+  margin-bottom: 20px;
+  width: 80%;
 }
 
 
@@ -315,33 +358,5 @@ code {
   #arrow::before{
     content: "\2193";
   }
-  /* The sidenav */
-  .sidebar {
-    width: 200px;
-    background-color: #f3f3f3;
-    color: white;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  .sidebar a {
-    display: block;
-    color: black; /* Set default color */
-    text-decoration: none; /* Remove underline */
-    /* font-weight: bold; Make the font bold - not sure if we want it bold all the time */
-  }
   
-  .sidebar a:hover {
-    color:#eb6c05; /* Change color on hover */
-  }
-  
-  #main {
-    flex: 1;
-    padding: 20px;
-  }
-  .section {
-    margin-bottom: 20px;
-    width: 80%;
-  }
   }
