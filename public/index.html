@@ -16,8 +16,6 @@
   <link rel="stylesheet" href="index.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
   <meta name="theme-color" content="#eb6c05"> <!-- ask what color he wants and adjust accordingly -->
-  <link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css">
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body class="x x-fonts-raleway">
@@ -80,27 +78,51 @@
             <form action="/upload" method="post" enctype="multipart/form-data">
               <div class="button-container">
                 <input type="submit" id="cropImage" value="Crop" disabled>
-              <div>
-          <div class="hairline-mode-container">
-            <label class="label-class"for="toggleSwitch">Hairline Mode</label>
-            <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="toggleSwitch" checked>
-              <label class="custom-control-label" for="toggleSwitch"></label>
-            </div>
+              </div>
+            </form> 
           </div>
           
+          <div id="arrow"></div>
+          
+          <div id="vectorWrapper" class="img-edit-wrapper">
+            <div class="image-wrapper">
+              <img id="outputImage" class="image-display" src="" alt="SVG will appear here."> 
+            </div>
+            <div class="slider-container">
+              <div class="slider-labels">
+                <span>Sharp</span>
+                <span>Smooth</span>
+              </div>
+              <input type="range" min="1" max="5000" value="1" class="slider" id="myRange" disabled>
+            </div> 
+          </div>
+  
         </div>
-        
+        <div id="upload-progress-container" class="section" style="display: none; width: 100%; background-color: #f3f3f3; border-radius: 20px;">
+          <div id="upload-progress-bar" style="height: 20px; width: 0%; background-color: #4CAF50; transition: width 0.4s ease-in-out;
+          border-radius: 20px; margin-top: 20px;"></div>
+        </div>   
+        <!-- <div class="image-tuning">
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>Sharp</span>
+              <span>Smooth</span>
+            </div>
+            <input type="range" min="1" max="5000" value="1" class="slider" id="myRange" disabled>
+          </div>
+          <form action="/upload" method="post" enctype="multipart/form-data">
+            <div class="button-container">
+              <input type="submit" id="cropImage" value="Crop" disabled>
+            </div>
+          </form>
+     
+        </div> -->
+        <br /><br />
+        <hr />
       </div>
-
     </div>
-    <div id="upload-progress-container" style="display: none; width: 100%; background-color: #f3f3f3; border-radius: 20px;">
-      <div id="upload-progress-bar" style="height: 20px; width: 0%; background-color: #4CAF50; transition: width 0.4s ease-in-out;
-      border-radius: 20px; margin-top: 20px;"></div>
-    </div>   
-    <br /><br />
-    <hr />
-  </div>
+    </div>
+    
   </div>
   
   <script src="https://cdn.jsdelivr.net/gh/ColonelParrot/jscanify@latest/src/jscanify.min.js"></script>
