@@ -85,7 +85,6 @@ body {
   display: flex;
   height: 100%; /* Set height to 100% */
   
-  
 }
 
 .toast {
@@ -198,6 +197,48 @@ body {
   box-sizing: border-box; /* Include padding and border in element's total width and height */
 }
 
+.custom-control-input:checked ~ .custom-control-label::before {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+.custom-switch-lg .custom-control-label::before {
+  width: 2.5rem; /* Change size as needed */
+  height: 1.5rem; /* Change size as needed */
+  
+}
+
+.hairline-mode-container {
+  display: flex;
+  align-items: center;
+  margin-top: 35px;
+}
+
+.hairline-mode-container label {
+  margin-right: 0px; /* Adjust as needed */
+}
+
+.label-class {
+  margin-right: 50px;
+}
+
+.custom-control.custom-switch {
+  margin-left: 220px;
+}
+
+.toggle-switch-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px; 
+}
+
+.toggle-switch-container .custom-control-label::before {
+  width: 2.5rem; /* Change size as needed */
+  height: 1.5rem; /* Change size as needed */
+  margin-right: 700px;
+}
+
+
 #uploadSuccess {
   margin-left: 10px; /* Add some space to the left of the message */
   color: #4CAF50; /* Green text */
@@ -218,6 +259,7 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-bottom: 30px;
 }
 
 .slider-labels {
@@ -301,7 +343,7 @@ code {
 }
 
 .sidebar {
-  width: 220px;
+  width: 320px;
   background-color: white;
   color: white;
   padding: 50px;
@@ -319,6 +361,7 @@ code {
 #main {
   flex: 1;
   padding: 20px;
+  margin-left: -50px;
 }
 .section {
   margin-bottom: 20px;
