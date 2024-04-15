@@ -1386,6 +1386,7 @@ function vectorizeHairline(blob) {
     const formData = new FormData();
     // Add the image to the FormData
     formData.append('image', blob, 'image.png');
+    formData.append('corner-threshold', 1); // Add the number to the FormData
     fetch('http://at.genesiscreativecollective.org:5050/convert/', {
       method: 'POST',
       mode: 'cors',
@@ -1585,7 +1586,8 @@ fileInput.addEventListener("click", handleFileUpload);
 // slider event listener to update smoothness
 const slider = document.getElementById('myRange');
 slider.addEventListener('change', function() {
-  const value = slider.value / 1000;
+  const value = slider.value / 500;
+  console.log(value);
   setParameter({alphamax: value});
   loadImageFromUrl(blobURL);
   process( () => {
