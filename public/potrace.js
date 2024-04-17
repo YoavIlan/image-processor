@@ -1386,7 +1386,7 @@ function vectorizeHairline(blob) {
     const formData = new FormData();
     // Add the image to the FormData
     formData.append('image', blob, 'image.png');
-    fetch('http://at.genesiscreativecollective.org:5050/convert/', {
+    fetch('https://at.genesiscreativecollective.org/convert/', {
       method: 'POST',
       mode: 'cors',
       body: formData,
