@@ -1327,17 +1327,20 @@ var autotraceBlob = null;
 
 // openCV URL
 const openCvURL = "https://docs.opencv.org/4.7.0/opencv.js"
+var openCVReady = false;
 
 // Load OpenCV on window load
 window.onload = function() {
   loadOpenCV(function () {
+    openCVReady = true;
     const submitBtn = document.getElementById('fileSubmit')
-    submitBtn.disabled = false;
-    submitBtn.value = "Convert Image";
+    submitBtn.value = 'Convert Image';
+    if (!document.getElementById('bitmapImage').src.includes('assets/image_placeholder_1.png')) {
+      submitBtn.disabled = false;
+    }
     // initial smoothness parameter
     setParameter({alphamax: 0})
-  })
-
+  });
 }
 
 /**
@@ -1579,11 +1582,16 @@ const fileUpload = document.getElementById('myFile');
 fileUpload.addEventListener('change', function(event) {
     // Get the selected file
     const file = event.target.files[0];
+    const submitBtn = document.getElementById('fileSubmit');
     if (file) {
-        // Create a URL for the file
-        const imageUrl = URL.createObjectURL(file);
-        document.getElementById('bitmapImage').src = imageUrl;
+      // Create a URL for the file
+      if (openCVReady)
+        submitBtn.disabled = false;
+      const imageUrl = URL.createObjectURL(file);
+      document.getElementById('bitmapImage').src = imageUrl;
     }
+    else
+      submitBtn.disabled = true;
 });
 
 // make bitmapimage clickable to upload file.
