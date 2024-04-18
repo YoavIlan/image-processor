@@ -1317,6 +1317,7 @@ const scanner = new jscanify()
 
 // global url of jscanified image
 var blobURL = null;
+var bitmapBlob = null;
 
 // global blob for potrace
 var potraceBlob = null;
@@ -1362,31 +1363,33 @@ function loadOpenCV(onComplete) {
 
 /**
  * handle vectorization logic between autotrace/potrace
- * @param {*} blob 
  */
-async function vectorizeBlob(blob) {
-  blobURL = URL.createObjectURL(blob);
+async function vectorizeBlob() {
+  blobURL = URL.createObjectURL(bitmapBlob);
   document.getElementById('bitmapImage').src = blobURL;
-
   // Wait for both vectorizeTrace and vectorizeHairline to complete
-  await Promise.all([vectorizeTrace(), vectorizeHairline(blob)]);
+  await Promise.all([vectorizeTrace(), vectorizeHairline()]);
   displaySVG();
   
   // Enable editing
   document.getElementById('cropImage').disabled = false;
-  if (!hairlineToggle.checked) 
-    document.getElementById('myRange').disabled = false;
+  document.getElementById('myRange').disabled = false;
 }
 
 /**
  * Vectorize the image using autotrace on the server side 
  */
-function vectorizeHairline(blob) {
+function vectorizeHairline() {
   return new Promise((resolve, reject) => {
     const formData = new FormData();
+    const aMax = document.getElementById('myRange').value / 500;
     // Add the image to the FormData
-    formData.append('image', blob, 'image.png');
-    formData.append('corner-threshold', 1); // Add the number to the FormData
+    formData.append('image', bitmapBlob, 'image.png');
+
+    // aMax in potrace is the inverse of autotrace. 0 is the max smoothness in autotrace. 
+    // Start sharp at 10. Don't go below 1
+    formData.append('corner-threshold', Math.max(10 - aMax, 1));
+
     fetch('https://at.genesiscreativecollective.org/convert/', {
       method: 'POST',
       mode: 'cors',
@@ -1414,7 +1417,9 @@ function vectorizeHairline(blob) {
  * Vectorize the image using Potrace
  */
 function vectorizeTrace() {
+  const aMax = document.getElementById('myRange').value / 500;
   return new Promise((resolve, reject) => { 
+    setParameter({alphamax: aMax});
     loadImageFromUrl(blobURL);
     process( () => {
       const svg = getSVG(1);
@@ -1458,7 +1463,8 @@ function handleFileUpload(event) {
         const resultCanvas = scanner.extractPaper(newImg, 1159.09090909, 1500);
         resultCanvas.toBlob(function(blob) {
           // vectorize the jscanified image  
-          vectorizeBlob(blob);
+          bitmapBlob = blob;
+          vectorizeBlob();
         });
     }
 
@@ -1549,7 +1555,8 @@ function cropImage(event) {
     }
     const croppedCanvas = this.cropper.getCroppedCanvas(); // Get canvas of cropped image
     croppedCanvas.toBlob(function(blob) {
-      vectorizeBlob(blob);
+      bitmapBlob = blob;
+      vectorizeBlob();
     });
     this.cropper.destroy(); // Cleanup cropper
     this.cropper = null; // Reset cropper variable
@@ -1588,13 +1595,14 @@ const slider = document.getElementById('myRange');
 slider.addEventListener('change', function() {
   const value = slider.value / 500;
   console.log(value);
-  setParameter({alphamax: value});
-  loadImageFromUrl(blobURL);
-  process( () => {
-    const svg = getSVG(1);
-    potraceBlob = new Blob([svg], { type: 'image/svg+xml' });
-    displaySVG();
-  });
+  // setParameter({alphamax: value});
+  // loadImageFromUrl(blobURL);
+  // process( () => {
+  //   const svg = getSVG(1);
+  //   potraceBlob = new Blob([svg], { type: 'image/svg+xml' });
+  //   displaySVG();
+  // });
+  vectorizeBlob();
 });
 
 // Cropper event listener
@@ -1610,5 +1618,4 @@ const hairlineToggle = document.getElementById("toggleSwitch");
 hairlineToggle.addEventListener("change", () => {
   displaySVG();
   slider.disabled = hairlineToggle.checked;
-  slider.value = 0;
 });
