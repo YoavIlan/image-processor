@@ -65,7 +65,7 @@
               <form action="/upload" method="post" enctype="multipart/form-data">
                 <div class="button-container">
                   <div class="file-upload-wrapper">
-                    <label for="myFile" class="custom-file-upload">Choose Image</label>
+                    <!-- <label for="myFile" class="custom-file-upload" style="margin-top: 20px;">Choose Image</label> -->
                     <input type="file" id="myFile" name="image" accept="image/jpeg, image/png, image/jpg, image/bmp" hidden>
                     <input type="submit" id="fileSubmit" value="Loading Resources..." disabled>
                     <input type="submit" id="downloadButton" value="Download" disabled>
@@ -85,7 +85,9 @@
               </form> 
             </div>
       
-            <div id="arrow"></div>
+           
+              <div id="arrow" style="margin-top: -100px; margin-right: 70px;"></div>
+            
       
             <div id="vectorWrapper" class="img-edit-wrapper">
               <div class="image-wrapper">
@@ -126,6 +128,29 @@
   <script src="potrace.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
   <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const bitmapImage = document.getElementById('bitmapImage');
+    const fileInput = document.getElementById('myFile');
+
+    bitmapImage.addEventListener('click', function() {
+        fileInput.click(); // Trigger file input dialog
+    });
+
+    // Optional: Update bitmapImage source when a file is selected
+    fileInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                bitmapImage.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+});
+
+  </script>
 
 </body>
 

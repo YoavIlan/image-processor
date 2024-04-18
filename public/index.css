@@ -411,12 +411,19 @@ code {
     text-align: center;
   }
   #arrow{
-    margin-top: 0;
+    margin-top: 75px;
     justify-content: center;
+    width: 50px; /* Adjust arrow width as needed */
+    height: 50px; /* Adjust arrow height as needed */
+    background-color: #333; 
+    margin-left: 20px;
   }
 
   #arrow::before{
     content: "\2193";
   }
+
+ 
+  
   
   }
