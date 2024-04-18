@@ -144,6 +144,7 @@ body {
   flex-direction: column;
   gap: 10px;
   justify-content: space-between;
+  
 }
 
 .button-container label.custom-file-upload,
@@ -175,7 +176,7 @@ body {
 .button-container label.custom-file-upload:hover,
 .file-upload-container, 
 .button-container input[type="submit"]:hover:not(:disabled) {
-  background-color: #723000;
+  background-color: #4560a0;
 }
 
 .file-upload-wrapper {

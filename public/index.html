@@ -58,17 +58,14 @@
               Simply upload an image and the tool will do the rest.</p>
             </div>
             <hr />
-            <div id="demo-title" class="section">
-              <b><h4>Upload Image below</h4></b>
-            </div>
             <div id="file-upload" class="section">
               <form action="/upload" method="post" enctype="multipart/form-data">
                 <div class="button-container">
                   <div class="file-upload-wrapper">
                     <!-- <label for="myFile" class="custom-file-upload" style="margin-top: 20px;">Choose Image</label> -->
                     <input type="file" id="myFile" name="image" accept="image/jpeg, image/png, image/jpg, image/bmp" hidden>
-                    <input type="submit" id="fileSubmit" value="Loading Resources..." disabled>
-                    <input type="submit" id="downloadButton" value="Download" disabled>
+                    <input type="submit" id="fileSubmit" value="Loading Resources..." disabled style="margin-left: 170px;">
+                    <input type="submit" id="downloadButton" value="Download" disabled style="margin-left: -170px;">
                   </div>
                 </div>
               </form>
@@ -80,7 +77,7 @@
               </div>
               <form action="/upload" method="post" enctype="multipart/form-data">
                 <div class="button-container">
-                  <input type="submit" id="cropImage" value="Crop" disabled>
+                  <input type="submit" id="cropImage" value="Crop" disabled style="margin-top: -100px;">
                 </div>
               </form> 
             </div>
