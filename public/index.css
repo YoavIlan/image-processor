@@ -199,6 +199,14 @@ body {
   box-sizing: border-box; /* Include padding and border in element's total width and height */
 }
 
+.doc-image-display {
+  width: 228.22912px;
+  height: 191.87938px;
+  display: block;
+  margin: 0 auto;
+  padding: 20px; 
+}
+
 #bitmapImage {
   cursor: pointer;
 }

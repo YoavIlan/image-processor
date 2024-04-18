@@ -38,24 +38,40 @@
     <div>
       <!-- create a beautiful landing page that explains that this is an image vectorizer that will take any image and transform it into an SVG format -->
       <div id="header">
-        <h3>Image Vectorizer</h3>
+        <h2>Bitmap to SVG Image Converter</h2>
         <p>Image vectorizer into SVG complete with parallax effect mitigation</p>
       </div>
       <div id="content">
         <!-- The sidebar -->
         
         <div id="main">
-          <!-- explain that this was created as a project by students at the university of texas for the Austin School for the Driven -->   
-          <div id="about" class="section">
-            <b><h4>About</h4></b>
-            <p>This project was created as a project by students at the University of Texas for the Austin School for the
-              Driven.</p>
-          </div>
           <!-- Explain that this tool will accept any bitmap image, correct for minor parallax issues, and download an svg output   -->
           <div id="how-it-works" class="section">
-            <b><h4>How it works</h4></b>
-            <p>This tool will accept any bitmap image, correct for minor parallax issues, and download an svg output.
-              Simply upload an image and the tool will do the rest.</p>
+            <b><h3>How it Works</h3></b>
+            <p>This tool offered by the Austin School for the Driven is designed to help you transform your image files into a format that is well-suited for many applications commonly used in makerspaces, such as 3D printing.</p>
+            <h5>Understanding Vectorized Images</h5>
+            <img src="assets/bitmap_graphics.jpeg" class="doc-image-display" alt="Figure 1. Bitmapped (Raster) Graphics">
+            <p>Many makerspace applications, such as 3D printers, require smooth, high-quality lines to ensure clean, sharp cuts and edges in the final product. Vector files, like Scalable Vector Graphics (SVG), solve this issue by describing the image using mathematical equations rather than a grid of pixels. As a result, vector images can be scaled up or down without losing quality - the lines and shapes remain smooth and sharp even when greatly enlarged (Figure 2) [1].</p>
+            <p>The primary benefit of vector files over bitmaps is their scalability. Bitmap images are resolution-dependent, meaning they look good at their native size but become pixelated when enlarged. Vector files, on the other hand, are resolution-independent. They define shapes and lines using equations, so the image can be scaled to any size without degradation. This makes them great for many different makerspace applications.</p>
+            <img src="assets/vector_graphics.jpeg" class="doc-image-display" alt="Figure 2. Vector graphics">
+            <h5>Using the Vectorization Tool</h5>
+            <p>If you have a bitmap image, such as a hand-drawn sketch, that you want to use for your makerspace projects, you can use this tool to convert it into a high-quality SVG vector file. The tool will start by trying to find borders of dark lines on the paper, and use these to make lines. This means that the tool will be sensitive to different colors on the paper, as well as dark shadows. To avoid these issues:</p>
+            <ol>
+              <li>Take a picture of your drawing using flash. This will make sure that there aren't any shadows that could interfere with your drawing.</li>
+              <li>Use plain white paper if possible. Avoid using paper with multiple colors or dark lines. This will make sure the tool focuses on your drawing and not the lines of the paper.</li>
+              <li>Use only one color when making your drawing. This will make sure that the tool captures your entire drawing and is able to make smooth and sharp lines.</li>
+              <li>Try using a darker color when making your drawing. Since the tool looks for borders of dark lines, darker colors will help the tool get the smoothest result.</li>
+            </ol>
+            <p>Another step that the tool takes when making your SVG is solving for the Parallax effect. The parallax effect is when things seem to get closer or farther away based on the angle that you look at them from. This effect makes drawing look different if you look at them from a sharp angle. Our tool uses the borders of the paper to determine the angle and adjust the paper to be at a perpendicular angle. To make sure that your SVG has proper handling of the parallax effect:</p>
+            <ol start="5">
+              <li>Make sure the entire paper outline is visible in the picture. Since the tool uses the paper outline to solve the parallax effect, this will ensure that you will get the best results.</li>
+              <li>Use a standard <u>8.5 x 11</u> paper. The tool is set to handle this paper size, and will best account for the parallax effect in these conditions.</li>
+              <li>Try using a neutral background around the paper for your picture. This will make sure that the tool is able to identify clearly the borders of the paper to solve the parallax effect.</li>
+            </ol>
+            <p>Once you have a picture of your drawing, upload it to the tool and select <b>"Convert Image"</b> to see a preview of your SVG. You may crop your svg on the left, and you will see a preview of your edited SVG on the right side. Once you are satisfied with the result, simply click download to get your SVG file.</p>
+            <h5>Reference</h5>
+            <p>[1] "Vector and Bitmap Image Guide." Business.oregonstate.edu, Oregon State University, <a href="https://business.oregonstate.edu/student-experience/resources/DAMlab/vector-and-bitmap-image-guide" target="_blank">https://business.oregonstate.edu/student-experience/resources/DAMlab/vector-and-bitmap-image-guide</a>.</p>
+            <p>Digital images come in two main file formats - bitmaps and vectors. Bitmap images, like JPG and PNG files, are made up of a grid of tiny colored pixels. This pixel-based approach allows bitmaps to accurately capture detailed images. However, bitmaps have a key limitation - when you zoom in on the image, the individual pixels become visible, resulting in a rough, pixelated appearance (Figure 1) [1].</p>
             </div>
             <hr />
             <div id="file-upload" class="section">
@@ -111,7 +127,9 @@
           <hr />
         </div>
       </div>
-
+      <p style="text-align: right; margin-right: 20px; font-size: 12px; color: #666;">
+        Created as a project by students at the University of Texas for the Austin School for the Driven
+      </p>      
   </div>
 
   <script src="https://cdn.jsdelivr.net/gh/ColonelParrot/jscanify@latest/src/jscanify.min.js"></script>
