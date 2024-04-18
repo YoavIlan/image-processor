@@ -175,7 +175,7 @@ body {
 .button-container label.custom-file-upload:hover,
 .file-upload-container, 
 .button-container input[type="submit"]:hover:not(:disabled) {
-  background-color: #4560a0;
+  background-color: #723000;
 }
 
 .file-upload-wrapper {

@@ -1595,13 +1595,6 @@ const slider = document.getElementById('myRange');
 slider.addEventListener('change', function() {
   const value = slider.value / 500;
   console.log(value);
-  // setParameter({alphamax: value});
-  // loadImageFromUrl(blobURL);
-  // process( () => {
-  //   const svg = getSVG(1);
-  //   potraceBlob = new Blob([svg], { type: 'image/svg+xml' });
-  //   displaySVG();
-  // });
   vectorizeBlob();
 });
 
