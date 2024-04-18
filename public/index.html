@@ -119,30 +119,6 @@
   <script src="potrace.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
   <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    const bitmapImage = document.getElementById('bitmapImage');
-    const fileInput = document.getElementById('myFile');
-
-    bitmapImage.addEventListener('click', function() {
-        fileInput.click(); // Trigger file input dialog
-    });
-
-    // Optional: Update bitmapImage source when a file is selected
-    fileInput.addEventListener('change', function() {
-        const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                bitmapImage.src = event.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-});
-
-  </script>
-
 </body>
 
 </html>

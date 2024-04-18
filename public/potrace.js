@@ -1586,6 +1586,12 @@ fileUpload.addEventListener('change', function(event) {
     }
 });
 
+// make bitmapimage clickable to upload file.
+const bitmapImage = document.getElementById('bitmapImage');
+bitmapImage.addEventListener('click', function() {
+  fileUpload.click();
+});
+
 // Listen for convert file button click
 const fileInput = document.getElementById("fileSubmit");
 fileInput.addEventListener("click", handleFileUpload);

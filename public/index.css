@@ -199,6 +199,10 @@ body {
   box-sizing: border-box; /* Include padding and border in element's total width and height */
 }
 
+#bitmapImage {
+  cursor: pointer;
+}
+
 .custom-control-input:checked ~ .custom-control-label::before {
   background-color: #28a745;
   border-color: #28a745;
