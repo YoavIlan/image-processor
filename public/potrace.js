@@ -1624,5 +1624,4 @@ downloadButton.addEventListener('click', downloadSVG);
 const hairlineToggle = document.getElementById("toggleSwitch");
 hairlineToggle.addEventListener("change", () => {
   displaySVG();
-  slider.disabled = hairlineToggle.checked;
 });
