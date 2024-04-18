@@ -64,8 +64,9 @@
                   <div class="file-upload-wrapper">
                     <!-- <label for="myFile" class="custom-file-upload" style="margin-top: 20px;">Choose Image</label> -->
                     <input type="file" id="myFile" name="image" accept="image/jpeg, image/png, image/jpg, image/bmp" hidden>
-                    <input type="submit" id="fileSubmit" value="Loading Resources..." disabled style="margin-left: 170px;">
-                    <input type="submit" id="downloadButton" value="Download" disabled style="margin-left: -170px;">
+                    <input type="submit" id="fileSubmit" value="Loading Resources..." disabled >
+                    <div class="arrow"></div>
+                    <input type="submit" id="downloadButton" value="Download" disabled >
                   </div>
                 </div>
               </form>
@@ -77,13 +78,13 @@
               </div>
               <form action="/upload" method="post" enctype="multipart/form-data">
                 <div class="button-container">
-                  <input type="submit" id="cropImage" value="Crop" disabled style="margin-top: -100px;">
+                  <input type="submit" id="cropImage" value="Crop" disabled >
                 </div>
               </form> 
             </div>
       
            
-              <div id="arrow" style="margin-top: -100px; margin-right: 70px;"></div>
+              <div id="arrow" ></div>
             
       
             <div id="vectorWrapper" class="img-edit-wrapper">
@@ -97,22 +98,15 @@
                 </div>
                 <input type="range" min="1" max="5000" value="1" class="slider" id="myRange" disabled>
               </div> 
-              <div> 
               <div class="hairline-mode-container">
                   <label class="label-class"for="toggleSwitch">Hairline Mode</label>
                   <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" id="toggleSwitch" checked>
                     <label class="custom-control-label" for="toggleSwitch"></label>
                   </div>
-                </div>   
-              </div>
-              
+              </div>   
             </div>
           </div>  
-          <div id="upload-progress-container" class="section" style="display: none; width: 100%; background-color: #f3f3f3; border-radius: 20px;">
-            <div id="upload-progress-bar" style="height: 20px; width: 0%; background-color: #4CAF50; transition: width 0.4s ease-in-out;
-            border-radius: 20px; margin-top: 20px;"></div>
-          </div>   
           <br /><br />
           <hr />
         </div>
