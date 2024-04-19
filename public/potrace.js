@@ -1543,6 +1543,7 @@ function downloadSVG(event) {
   document.body.appendChild(downloadLink);
   downloadLink.click();
   document.body.removeChild(downloadLink);
+  resetDash();
 }
 
 
@@ -1574,6 +1575,28 @@ function cropImage(event) {
     document.getElementById('myFile').disabled = false;
     hairlineToggle.disabled = false;
 
+}
+
+/**
+ * Reset everything and prepare for a new image upload
+ */
+function resetDash() {
+  document.getElementById('bitmapImage').src = 'assets/image_placeholder_1.png';
+  document.getElementById('outputImage').src = 'assets/image_placeholder_2.png';
+  fileInput.disabled = true;
+  downloadButton.disabled = true;
+  slider.value = 0;
+  slider.disabled = true;
+  hairlineToggle.checked = true;
+  cropButton.disabled = true;
+  if (cropper) {
+    cropper.destroy();
+    cropper = null;
+  }
+  blobURL = null;
+  bitmapBlob = null;
+  potraceBlob = null;
+  autotraceBlob = null;
 }
 
 // Add an event listener for when a file is selected
