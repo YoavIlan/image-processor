@@ -1,4 +1,4 @@
-# Austin School for the Driven - Image 
+# Austin School for the Driven - Image Processor
 
 https://at.genesiscreativecollective.org/
 
@@ -26,8 +26,9 @@ If you have a bitmap image, such as a hand-drawn sketch, that you want to use fo
 
 1) Take a picture of your drawing using flash. This will make sure that there aren't any shadows that could interfere with your drawing.
 2) Use plain white paper if possible. Avoid using paper with multiple colors or dark lines. This will make sure the tool focuses on your drawing and not the lines of the paper.
-3) Use only one color when making your drawing. This will make sure that the tool captures your entire drawing and is able to make smooth and sharp lines.
-4) Try using a darker color when making your drawing. Since the tool looks for borders of dark lines, darker colors will help the tool get the smoothest result.
+3) Make sure you are vectorizing a hand drawn image. This tool was designed for hand drawn images and might not function properly for other pictures.
+4) Use only one color when making your drawing. This will make sure that the tool captures your entire drawing and is able to make smooth and sharp lines.
+5) Try using a darker color when making your drawing. Since the tool looks for borders of dark lines, darker colors will help the tool get the smoothest result.
 
 Another step that the tool takes when making your SVG is solving for the Parallax effect. The parallax effect is when things seem to get closer or farther away based on the angle that you look at them from. This effect makes drawing look different if you look at them from a sharp angle. Our tool uses the borders of the paper to determine the angle and adjust the paper to be at a perpendicular angle. To make sure that your SVG has proper handling of the parallax effect:
 
@@ -35,7 +36,7 @@ Another step that the tool takes when making your SVG is solving for the Paralla
 6) Use a standard 8.5 x 11 paper. The tool is set to handle this paper size, and will best account for the parallax effect in these conditions.
 7) Try using a neutral background around the paper for your picture. This will make sure that the tool is able to identify clearly the borders of the paper to solve the parallax effect.
 
-Once you have a picture of your drawing, upload it to the tool and select "convert" to see a preview of your SVG. You may crop your svg on the left, and you will see a preview of your edited SVG on the right side. Once you are satisfied with the result, simply click download to get your SVG file.
+Once you have a picture of your drawing, upload it to the tool and select "convert" to see a preview of your SVG. You may crop your svg on the left, and you will see a preview of your edited SVG on the right side. When cropping, the frame will stay in the ratio of 8.5x11, but feel free to move around the frame to re-center it to best fit your drawing. Once you are satisfied with the result, simply click download to get your SVG file.
 
 **Reference**
 
