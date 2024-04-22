@@ -1583,6 +1583,7 @@ function resetDash(event) {
   event.preventDefault();
   document.getElementById('bitmapImage').src = 'assets/image_placeholder_1.png';
   document.getElementById('outputImage').src = 'assets/image_placeholder_2.png';
+  document.getElementById('myFile').value = null;
   fileInput.disabled = true;
   downloadButton.disabled = true;
   slider.value = 0;
@@ -1628,7 +1629,7 @@ const fileInput = document.getElementById("fileSubmit");
 fileInput.addEventListener("click", handleFileUpload);
 
 // Listen for reset button click
-const resetButton = document.getElementById("reset");
+const resetButton = document.getElementById("resetBtn");
 resetButton.addEventListener("click", resetDash);
 
 // slider event listener to update smoothness
