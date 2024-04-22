@@ -1,9 +1,12 @@
 # Austin School for the Driven - Image Processor
 
-https://at.genesiscreativecollective.org/
+[Website](https://at.genesiscreativecollective.org/)
 
-This tool offered by the Austin School for the Driven is designed to help you transform your image files into a format that is well-suited for many applications commonly used in makerspaces, such as 3D printing.
+This tool offered by the Austin School for the Driven is designed to help you transform images of your hand-drawn sketches into a format that is well-suited for many applications commonly used in makerspaces, such as vinyl cutters and laser cutters.
 
+This is an open-sourced implementation of multiple image technologies including [Jscanify](https://github.com/ColonelParrot/jscanify) for parallax effect mitigation, [Cropper.js](https://github.com/fengyuanchen/cropperjs) for cropping, and [Potrace](https://github.com/kilobtye/Potrace), [ImageMagick](https://imagemagick.org) and [Autotrace](https://github.com/autotrace/autotrace?tab=readme-ov-file) for bitmap -> vector conversions. Thank you to the creators of those respective projects for enabling us to create this tool.
+
+****
 ## Understanding Vectorized Images
 
 Digital images come in two main file formats - bitmaps and vectors. Bitmap images, like JPG and PNG files, are made up of a grid of tiny colored pixels. This pixel-based approach allows bitmaps to accurately capture detailed images. However, bitmaps have a key limitation - when you zoom in on the image, the individual pixels become visible, resulting in a rough, pixelated appearance (Figure 1) [1].
