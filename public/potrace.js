@@ -1543,7 +1543,6 @@ function downloadSVG(event) {
   document.body.appendChild(downloadLink);
   downloadLink.click();
   document.body.removeChild(downloadLink);
-  resetDash();
 }
 
 
@@ -1580,7 +1579,8 @@ function cropImage(event) {
 /**
  * Reset everything and prepare for a new image upload
  */
-function resetDash() {
+function resetDash(event) {
+  event.preventDefault();
   document.getElementById('bitmapImage').src = 'assets/image_placeholder_1.png';
   document.getElementById('outputImage').src = 'assets/image_placeholder_2.png';
   fileInput.disabled = true;
@@ -1626,6 +1626,10 @@ bitmapImage.addEventListener('click', function() {
 // Listen for convert file button click
 const fileInput = document.getElementById("fileSubmit");
 fileInput.addEventListener("click", handleFileUpload);
+
+// Listen for reset button click
+const resetButton = document.getElementById("reset");
+resetButton.addEventListener("click", resetDash);
 
 // slider event listener to update smoothness
 const slider = document.getElementById('myRange');
