@@ -11,7 +11,7 @@ This is an open-sourced implementation of multiple image technologies including 
 
 Digital images come in two main file formats - bitmaps and vectors. Bitmap images, like JPG and PNG files, are made up of a grid of tiny colored pixels. This pixel-based approach allows bitmaps to accurately capture detailed images. However, bitmaps have a key limitation - when you zoom in on the image, the individual pixels become visible, resulting in a rough, pixelated appearance (Figure 1) [1].
 
-![](assets/image2.png){width="3.2604166666666665in" height="2.741134076990376in"}
+<img src="public/assets/bitmap_graphics.jpeg" width=400 height=auto>
 
 *Figure 1. Bitmapped (Raster) Graphics*
 
@@ -19,7 +19,7 @@ Many makerspace applications, such as 3D printers, require smooth, high-quality 
 
 The primary benefit of vector files over bitmaps is their scalability. Bitmap images are resolution-dependent, meaning they look good at their native size but become pixelated when enlarged. Vector files, on the other hand, are resolution-independent. They define shapes and lines using equations, so the image can be scaled to any size without degradation. This makes them great for many different makerspace applications.
 
-![](assets/image1.png){width="3.5677088801399823in" height="2.8757895888014in"}
+<img src="public/assets/vector_graphics.jpeg" width=400 height=auto>
 
 *Figure 2. Vector graphics*
 
