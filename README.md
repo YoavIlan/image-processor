@@ -2,9 +2,15 @@
 
 [Website](https://at.genesiscreativecollective.org/)
 
-This tool offered by the Austin School for the Driven is designed to help you transform images of your hand-drawn sketches into a format that is well-suited for many applications commonly used in makerspaces, such as vinyl cutters and laser cutters.
+This tool offered by the Austin School for the Driven is designed to help you transform images of your hand-drawn sketches into a format that is well-suited for many applications commonly used in makerspaces, such as vinyl cutters and laser cutters. 
+
+The developers of this tool are are Harini Ala, Shivam Bhardwaj, Joel Brisola, Joshua George, Yoav Ilan, and Shruthi Sundaranand.
 
 This is an open-sourced implementation of multiple image technologies including [Jscanify](https://github.com/ColonelParrot/jscanify) for parallax effect mitigation, [Cropper.js](https://github.com/fengyuanchen/cropperjs) for cropping, and [Potrace](https://github.com/kilobtye/Potrace), [ImageMagick](https://imagemagick.org) and [Autotrace](https://github.com/autotrace/autotrace?tab=readme-ov-file) for bitmap -> vector conversions. Thank you to the creators of those respective projects for enabling us to create this tool.
+
+We would also like to thank Greg Keller for his work sorting out issues, [Kenji Yoshino](https://www.instagram.com/kenji_yoshino/) for exploring the need for such a tool, and [Genesis Creative Collective](https://www.genesiscreativecollective.org/home) for hosting the tool.
+
+This is a completely open source project distributed under the MIT license.
 
 ****
 ## Understanding Vectorized Images
